@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Student ERP | Login</title>
+
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/style.css') }}"
+    />
+  </head>
+
+  <body>
+    <div class="login-container">
+      <!-- Left Section -->
+      <div class="login-left">
+        <div class="portal-icon">🎓</div>
+
+        <h1>Student ERP</h1>
+
+        <p>
+          A centralized platform for managing your academic information,
+          attendance, marks, fees and other student services.
+        </p>
+      </div>
+
+      <!-- Right Section -->
+      <div class="login-right">
+        <h2>Welcome Back!</h2>
+
+        <p class="subtitle">Login to access your student portal.</p>
+
+        <form>
+          <div class="form-group">
+            <label for="student_id">Student ID</label>
+
+            <input
+              type="text"
+              id="student_id"
+              name="student_id"
+              placeholder="Enter your Student ID"
+              required
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="password">Password</label>
+
+            <input
+              type="password"
+              id="password"
+              name="password"
+              placeholder="Enter your Password"
+              required
+            />
+          </div>
+
+          <a href="#" class="forgot-password"> Forgot Password? </a>
+
+          <button type="submit" class="login-btn">Login</button>
+        </form>
+      </div>
+    </div>
+  </body>
+</html>
