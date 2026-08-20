@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Student ERP | Marks & Results</title>
+
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/dashboard.css') }}"
+    />
+  </head>
+
+  <body>
+    <div class="dashboard-container">
+      <header class="dashboard-header">
+        <div>
+          <h1>Student ERP</h1>
+          <p>Marks & Results</p>
+        </div>
+
+        <a href="/dashboard" class="logout-btn"> Dashboard </a>
+      </header>
+
+      <main class="dashboard-content">
+        <h2>Marks & Results 📝</h2>
+
+        <p class="welcome-text">View your academic marks and results.</p>
+
+        <div class="student-info">
+          <h3>Semester 5 Results</h3>
+
+          {% for record in marks_data %}
+
+          <p>
+            <strong> {{ record.subject_name }}: </strong>
+
+            {{ record.marks }} / 100
+          </p>
+
+          {% endfor %}
+        </div>
+      </main>
+    </div>
+  </body>
+</html>

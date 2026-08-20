@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Student ERP | Assigned Faculty</title>
+
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/dashboard.css') }}"
+    />
+  </head>
+
+  <body>
+    <div class="dashboard-container">
+      <header class="dashboard-header">
+        <div>
+          <h1>Student ERP</h1>
+          <p>Assigned Faculty</p>
+        </div>
+
+        <a href="/dashboard" class="logout-btn"> Dashboard </a>
+      </header>
+
+      <main class="dashboard-content">
+        <h2>Assigned Faculty 👨‍🏫</h2>
+
+        <p class="welcome-text">
+          View the faculty members assigned to your subjects.
+        </p>
+
+        <div class="module-grid">
+          {% for faculty in faculty_data %}
+
+          <div class="module-card">
+            <h3>{{ faculty.subject_name }}</h3>
+
+            <p>
+              <strong>Subject Code:</strong>
+              {{ faculty.subject_code }}
+            </p>
+
+            <p>
+              <strong>Faculty:</strong>
+              {{ faculty.faculty }}
+            </p>
+          </div>
+
+          {% endfor %}
+        </div>
+      </main>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Student ERP | Attendance</title>
+
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/dashboard.css') }}"
+    />
+  </head>
+
+  <body>
+    <div class="dashboard-container">
+      <header class="dashboard-header">
+        <div>
+          <h1>Student ERP</h1>
+          <p>Attendance</p>
+        </div>
+
+        <a href="/dashboard" class="logout-btn"> Dashboard </a>
+      </header>
+
+      <main class="dashboard-content">
+        <h2>My Attendance 📊</h2>
+
+        <p class="welcome-text">View your subject-wise attendance.</p>
+
+        <div class="student-info">
+          <h3>Attendance Summary</h3>
+
+          {% for record in attendance_data %}
+
+          <p>
+            <strong> {{ record.subject_name }}: </strong>
+
+            {{ record.attendance_percentage }}%
+          </p>
+
+          {% endfor %}
+        </div>
+      </main>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Student ERP | Dashboard</title>
+
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/dashboard.css') }}"
+    />
+  </head>
+
+  <body>
+    <div class="dashboard-container">
+      <!-- Header -->
+      <header class="dashboard-header">
+        <div>
+          <h1>Student ERP</h1>
+          <p>Student Dashboard</p>
+        </div>
+
+        <a href="/logout" class="logout-btn"> Logout </a>
+      </header>
+
+      <!-- Main Content -->
+      <main class="dashboard-content">
+        <h2>Welcome, {{ student.name }}! 👋</h2>
+
+        <p class="welcome-text">
+          Welcome to your student portal. Access your academic information and
+          student services from here.
+        </p>
+
+        <!-- Student Information -->
+        <div class="student-info">
+          <h3>Student Information</h3>
+
+          <p>
+            <strong>Student ID:</strong>
+            {{ student.student_id }}
+          </p>
+
+          <p>
+            <strong>Email:</strong>
+            {{ student.email }}
+          </p>
+
+          <p>
+            <strong>Department:</strong>
+            {{ student.department }}
+          </p>
+
+          <p>
+            <strong>Year:</strong>
+            {{ student.year }}
+          </p>
+
+          <p>
+            <strong>Semester:</strong>
+            {{ student.semester }}
+          </p>
+
+          <p>
+            <strong>Section:</strong>
+            {{ student.section }}
+          </p>
+        </div>
+
+        <!-- Student Modules -->
+        <div class="module-grid">
+          <!-- My Subjects -->
+          <a href="/subjects" class="module-card">
+            <h3>📚 My Subjects</h3>
+
+            <p>View the subjects you are enrolled in.</p>
+          </a>
+
+          <!-- Assigned Faculty -->
+          <a href="/assigned-faculty" class="module-card">
+            <h3>👨‍🏫 Assigned Faculty</h3>
+
+            <p>View faculty members assigned to your subjects.</p>
+          </a>
+
+          <!-- Attendance -->
+          <a href="/attendance" class="module-card">
+            <h3>📊 Attendance</h3>
+
+            <p>View your subject-wise attendance.</p>
+          </a>
+
+          <!-- Marks & Results -->
+          <a href="/marks" class="module-card">
+            <h3>📝 Marks & Results</h3>
+
+            <p>View your academic marks and results.</p>
+          </a>
+
+          <!-- Timetable -->
+          <a href="/timetable" class="module-card">
+            <h3>🗓️ Timetable</h3>
+
+            <p>View your class timetable.</p>
+          </a>
+        </div>
+      </main>
+    </div>
+  </body>
+</html>
