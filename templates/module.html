@@ -1,0 +1,427 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{{ module.title }} - Student ERP</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/dashboard.css') }}"
+    />
+  </head>
+
+  <body>
+    <header class="top-header">
+      <div>
+        <h1>🎓 Student ERP</h1>
+        <p>Student Management Portal</p>
+      </div>
+
+      <div class="header-actions">
+        <a href="{{ url_for('dashboard') }}" class="header-btn">Dashboard</a>
+        <a href="{{ url_for('logout') }}" class="header-btn logout-btn"
+          >Logout</a
+        >
+      </div>
+    </header>
+
+    <main class="main-container">
+      <section class="welcome-card">
+        <div class="welcome-icon">{{ module.icon }}</div>
+
+        <div>
+          <h2>{{ module.title }}</h2>
+          <p>{{ module.description }}</p>
+          <span class="semester-badge">Semester {{ semester }}</span>
+        </div>
+      </section>
+
+      <!-- MY SUBJECTS -->
+      {% if module_name == "subjects" %}
+
+      <section class="table-card">
+        <div class="section-heading">
+          <h2>📚 My Subjects</h2>
+          <p>Subjects for Semester {{ semester }}</p>
+        </div>
+
+        {% if data %}
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th>S.No</th>
+                <th>Subject Code</th>
+                <th>Subject Name</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              {% for row in data %}
+              <tr>
+                <td>{{ loop.index }}</td>
+                <td>{{ row.subject_code }}</td>
+                <td>{{ row.subject_name }}</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+        {% else %}
+        <div class="no-data">
+          No subjects found for Semester {{ semester }}.
+        </div>
+        {% endif %}
+      </section>
+
+      <!-- ASSIGNED FACULTY -->
+      {% elif module_name == "faculty" %}
+
+      <section class="table-card">
+        <div class="section-heading">
+          <h2>👨‍🏫 Assigned Faculty</h2>
+          <p>Faculty assigned for Semester {{ semester }}</p>
+        </div>
+
+        {% if data %}
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th>S.No</th>
+                <th>Subject Code</th>
+                <th>Subject Name</th>
+                <th>Faculty</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              {% for row in data %}
+              <tr>
+                <td>{{ loop.index }}</td>
+                <td>{{ row.subject_code }}</td>
+                <td>{{ row.subject_name }}</td>
+                <td>{{ row.faculty }}</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+        {% else %}
+        <div class="no-data">
+          No faculty information found for Semester {{ semester }}.
+        </div>
+        {% endif %}
+      </section>
+
+      <!-- ATTENDANCE -->
+      {% elif module_name == "attendance" %}
+
+      <section class="table-card">
+        <div class="section-heading">
+          <h2>📊 Attendance</h2>
+          <p>Attendance details for Semester {{ semester }}</p>
+        </div>
+
+        {% if data %}
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th>S.No</th>
+                <th>Subject Code</th>
+                <th>Subject</th>
+                <th>Attended</th>
+                <th>Total Classes</th>
+                <th>Percentage</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              {% for row in data %}
+              <tr>
+                <td>{{ loop.index }}</td>
+                <td>{{ row.subject_code }}</td>
+                <td>{{ row.subject_name }}</td>
+                <td>{{ row.attended }}</td>
+                <td>{{ row.total_classes }}</td>
+                <td>{{ row.percentage }}%</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+        {% else %}
+        <div class="no-data">
+          No attendance records found for Semester {{ semester }}.
+        </div>
+        {% endif %}
+      </section>
+
+      <!-- MARKS -->
+      {% elif module_name == "marks" %}
+
+      <section class="table-card">
+        <div class="section-heading">
+          <h2>🏆 Marks & Results</h2>
+          <p>Marks for Semester {{ semester }}</p>
+        </div>
+
+        {% if data %}
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th>S.No</th>
+                <th>Subject Code</th>
+                <th>Subject</th>
+                <th>Marks</th>
+                <th>Result</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              {% for row in data %}
+              <tr>
+                <td>{{ loop.index }}</td>
+                <td>{{ row.subject_code }}</td>
+                <td>{{ row.subject_name }}</td>
+                <td>{{ row.marks }}/100</td>
+
+                <td>
+                  {% if row.marks >= 40 %}
+                  <span class="status-success">Pass</span>
+                  {% else %}
+                  <span class="status-danger">Fail</span>
+                  {% endif %}
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+        {% else %}
+        <div class="no-data">No marks found for Semester {{ semester }}.</div>
+        {% endif %}
+      </section>
+
+      <!-- FEES -->
+      {% elif module_name == "fees" %}
+
+      <section class="table-card">
+        <div class="section-heading">
+          <h2>💳 Fees & Payments</h2>
+          <p>Fee details for Semester {{ semester }}</p>
+        </div>
+
+        {% if data %}
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th>Semester</th>
+                <th>Total Fee</th>
+                <th>Paid</th>
+                <th>Pending</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              {% for row in data %}
+              <tr>
+                <td>Semester {{ row.semester }}</td>
+                <td>₹{{ row.total_fee }}</td>
+                <td>₹{{ row.paid_fee }}</td>
+                <td>₹{{ row.pending_fee }}</td>
+
+                <td>
+                  {% if row.status == "Paid" %}
+                  <span class="status-success">Paid</span>
+                  {% else %}
+                  <span class="status-warning">{{ row.status }}</span>
+                  {% endif %}
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+        {% else %}
+        <div class="no-data">
+          No fee information found for Semester {{ semester }}.
+        </div>
+        {% endif %}
+      </section>
+
+      <!-- ASSIGNMENTS -->
+      {% elif module_name == "assignments" %}
+
+      <section class="table-card">
+        <div class="section-heading">
+          <h2>📝 Assignments</h2>
+          <p>Assignments for Semester {{ semester }}</p>
+        </div>
+
+        {% if data %}
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th>S.No</th>
+                <th>Subject Code</th>
+                <th>Subject</th>
+                <th>Assignment</th>
+                <th>Due Date</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              {% for row in data %}
+              <tr>
+                <td>{{ loop.index }}</td>
+                <td>{{ row.subject_code }}</td>
+                <td>{{ row.subject_name }}</td>
+                <td>{{ row.assignment_title }}</td>
+                <td>{{ row.due_date }}</td>
+
+                <td>
+                  {% if row.status == "Submitted" %}
+                  <span class="status-success">Submitted</span>
+                  {% else %}
+                  <span class="status-warning">{{ row.status }}</span>
+                  {% endif %}
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+        {% else %}
+        <div class="no-data">
+          No assignments found for Semester {{ semester }}.
+        </div>
+        {% endif %}
+      </section>
+
+      <!-- EXAMINATIONS -->
+      {% elif module_name == "examinations" %}
+
+      <section class="table-card">
+        <div class="section-heading">
+          <h2>📅 Examinations</h2>
+          <p>Examination schedule for Semester {{ semester }}</p>
+        </div>
+
+        {% if data %}
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th>S.No</th>
+                <th>Exam Type</th>
+                <th>Subject Code</th>
+                <th>Subject</th>
+                <th>Date</th>
+                <th>Time</th>
+                <th>Room</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              {% for row in data %}
+              <tr>
+                <td>{{ loop.index }}</td>
+
+                <td>
+                  {% if row.exam_type == "Mid Examination" %}
+                  <span class="status-warning"> Mid Examination </span>
+                  {% else %}
+                  <span class="status-success"> End-Term Examination </span>
+                  {% endif %}
+                </td>
+
+                <td>{{ row.subject_code }}</td>
+                <td>{{ row.subject_name }}</td>
+                <td>{{ row.exam_date }}</td>
+                <td>{{ row.exam_time }}</td>
+                <td>{{ row.room }}</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+        {% else %}
+        <div class="no-data">
+          No examination schedule found for Semester {{ semester }}.
+        </div>
+        {% endif %}
+      </section>
+
+      <!-- TIMETABLE -->
+      {% elif module_name == "timetable" %}
+
+      <section class="table-card">
+        <div class="section-heading">
+          <h2>🗓️ Timetable</h2>
+          <p>Class timetable for Semester {{ semester }}</p>
+        </div>
+
+        {% if data %}
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th>S.No</th>
+                <th>Day</th>
+                <th>Time</th>
+                <th>Subject Code</th>
+                <th>Subject</th>
+                <th>Room</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              {% for row in data %}
+              <tr>
+                <td>{{ loop.index }}</td>
+                <td>{{ row.day }}</td>
+                <td>{{ row.start_time }} - {{ row.end_time }}</td>
+                <td>{{ row.subject_code }}</td>
+                <td>{{ row.subject_name }}</td>
+                <td>{{ row.room }}</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+        {% else %}
+        <div class="no-data">
+          No timetable found for Semester {{ semester }}.
+        </div>
+        {% endif %}
+      </section>
+
+      {% endif %}
+
+      <!-- NAVIGATION -->
+      <div class="page-navigation">
+        <a
+          href="{{ url_for('module_selector', module_name=module_name) }}"
+          class="back-btn"
+        >
+          ← Change Semester
+        </a>
+
+        <a href="{{ url_for('dashboard') }}" class="back-btn">
+          🏠 Back to Dashboard
+        </a>
+      </div>
+    </main>
+
+    <footer class="footer">
+      <p>© 2026 Student ERP | Student Management Portal</p>
+    </footer>
+  </body>
+</html>

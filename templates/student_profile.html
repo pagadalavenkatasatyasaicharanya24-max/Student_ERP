@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Student Profile - Student ERP</title>
+
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/dashboard.css') }}"
+    />
+  </head>
+
+  <body>
+    <!-- HEADER -->
+    <header class="top-header">
+      <div class="header-left">
+        <div class="logo">🎓</div>
+
+        <div>
+          <h1>Student ERP</h1>
+          <p>Student Management Portal</p>
+        </div>
+      </div>
+
+      <div class="header-right">
+        <a href="{{ url_for('dashboard') }}" class="profile-btn">
+          🏠 Dashboard
+        </a>
+
+        <a href="{{ url_for('logout') }}" class="logout-btn"> Logout </a>
+      </div>
+    </header>
+
+    <!-- MAIN CONTENT -->
+    <main class="dashboard-container">
+      <!-- PROFILE HEADER -->
+      <section class="welcome-card">
+        <div class="welcome-text">
+          <h2>👤 Student Profile</h2>
+
+          <p>View your personal and academic information.</p>
+        </div>
+
+        <div class="student-badge">
+          <span>Student ID</span>
+
+          <strong> {{ student.student_id }} </strong>
+        </div>
+      </section>
+
+      <!-- PROFILE INFORMATION -->
+      <section class="student-info-card">
+        <div class="section-title">
+          <h2>Personal Information</h2>
+        </div>
+
+        <div class="student-info-grid">
+          <div class="info-item">
+            <span class="info-label"> Full Name </span>
+
+            <strong> {{ student.name }} </strong>
+          </div>
+
+          <div class="info-item">
+            <span class="info-label"> Student ID </span>
+
+            <strong> {{ student.student_id }} </strong>
+          </div>
+
+          <div class="info-item">
+            <span class="info-label"> Email </span>
+
+            <strong> {{ student.email }} </strong>
+          </div>
+
+          <div class="info-item">
+            <span class="info-label"> Phone </span>
+
+            <strong> {{ student.phone }} </strong>
+          </div>
+
+          <div class="info-item">
+            <span class="info-label"> Department </span>
+
+            <strong> {{ student.department }} </strong>
+          </div>
+
+          <div class="info-item">
+            <span class="info-label"> Year </span>
+
+            <strong> {{ student.year }} </strong>
+          </div>
+
+          <div class="info-item">
+            <span class="info-label"> Section </span>
+
+            <strong> {{ student.section }} </strong>
+          </div>
+        </div>
+      </section>
+
+      <!-- ACADEMIC INFORMATION -->
+      <section class="student-info-card">
+        <div class="section-title">
+          <h2>Academic Information</h2>
+        </div>
+
+        <div class="student-info-grid">
+          <div class="info-item">
+            <span class="info-label"> Department </span>
+
+            <strong> {{ student.department }} </strong>
+          </div>
+
+          <div class="info-item">
+            <span class="info-label"> Current Year </span>
+
+            <strong> {{ student.year }} </strong>
+          </div>
+
+          <div class="info-item">
+            <span class="info-label"> Section </span>
+
+            <strong> {{ student.section }} </strong>
+          </div>
+
+          <div class="info-item">
+            <span class="info-label"> Available Semesters </span>
+
+            <strong> Semester 1 - Semester 5 </strong>
+          </div>
+        </div>
+      </section>
+
+      <!-- NAVIGATION -->
+      <div class="module-navigation">
+        <a href="{{ url_for('dashboard') }}" class="back-btn">
+          ← Back to Dashboard
+        </a>
+      </div>
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="dashboard-footer">
+      <p>Student ERP &copy; 2026 | Student Management Portal</p>
+    </footer>
+  </body>
+</html>

@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>{{ module.title }} - Student ERP</title>
+
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/dashboard.css') }}"
+    />
+  </head>
+
+  <body>
+    <!-- HEADER -->
+    <header class="top-header">
+      <div class="header-left">
+        <div class="logo">🎓</div>
+
+        <div>
+          <h1>Student ERP</h1>
+          <p>Student Management Portal</p>
+        </div>
+      </div>
+
+      <div class="header-right">
+        <a href="{{ url_for('dashboard') }}" class="profile-btn">
+          🏠 Dashboard
+        </a>
+
+        <a href="{{ url_for('logout') }}" class="logout-btn"> Logout </a>
+      </div>
+    </header>
+
+    <!-- MAIN CONTENT -->
+    <main class="dashboard-container">
+      <!-- MODULE HEADER -->
+      <section class="welcome-card">
+        <div class="welcome-text">
+          <h2>{{ module.icon }} {{ module.title }}</h2>
+
+          <p>{{ module.description }}</p>
+        </div>
+      </section>
+
+      <!-- SEMESTER SELECTION -->
+      <section class="services-section">
+        <div class="section-heading">
+          <h2>Select Semester</h2>
+
+          <p>Choose the semester you want to view.</p>
+        </div>
+
+        <div class="services-grid">
+          <!-- SEMESTER 1 -->
+          <a
+            href="{{ url_for('module_view',
+                                    module_name=module_name,
+                                    semester=1) }}"
+            class="service-card"
+          >
+            <div class="service-icon">1️⃣</div>
+
+            <div class="service-content">
+              <h3>Semester 1</h3>
+
+              <p>View {{ module.title }} for Semester 1.</p>
+            </div>
+
+            <div class="card-arrow">→</div>
+          </a>
+
+          <!-- SEMESTER 2 -->
+          <a
+            href="{{ url_for('module_view',
+                                    module_name=module_name,
+                                    semester=2) }}"
+            class="service-card"
+          >
+            <div class="service-icon">2️⃣</div>
+
+            <div class="service-content">
+              <h3>Semester 2</h3>
+
+              <p>View {{ module.title }} for Semester 2.</p>
+            </div>
+
+            <div class="card-arrow">→</div>
+          </a>
+
+          <!-- SEMESTER 3 -->
+          <a
+            href="{{ url_for('module_view',
+                                    module_name=module_name,
+                                    semester=3) }}"
+            class="service-card"
+          >
+            <div class="service-icon">3️⃣</div>
+
+            <div class="service-content">
+              <h3>Semester 3</h3>
+
+              <p>View {{ module.title }} for Semester 3.</p>
+            </div>
+
+            <div class="card-arrow">→</div>
+          </a>
+
+          <!-- SEMESTER 4 -->
+          <a
+            href="{{ url_for('module_view',
+                                    module_name=module_name,
+                                    semester=4) }}"
+            class="service-card"
+          >
+            <div class="service-icon">4️⃣</div>
+
+            <div class="service-content">
+              <h3>Semester 4</h3>
+
+              <p>View {{ module.title }} for Semester 4.</p>
+            </div>
+
+            <div class="card-arrow">→</div>
+          </a>
+
+          <!-- SEMESTER 5 -->
+          <a
+            href="{{ url_for('module_view',
+                                    module_name=module_name,
+                                    semester=5) }}"
+            class="service-card"
+          >
+            <div class="service-icon">5️⃣</div>
+
+            <div class="service-content">
+              <h3>Semester 5</h3>
+
+              <p>View {{ module.title }} for Semester 5.</p>
+            </div>
+
+            <div class="card-arrow">→</div>
+          </a>
+        </div>
+      </section>
+
+      <!-- BACK BUTTON -->
+      <div class="back-navigation">
+        <a href="{{ url_for('dashboard') }}" class="back-btn">
+          ← Back to Dashboard
+        </a>
+      </div>
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="dashboard-footer">
+      <p>Student ERP &copy; 2026 | Student Management Portal</p>
+    </footer>
+  </body>
+</html>

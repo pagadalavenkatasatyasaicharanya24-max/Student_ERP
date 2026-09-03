@@ -4,108 +4,583 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <title>Student ERP | Dashboard</title>
+    <title>Student ERP - Dashboard</title>
 
-    <link
-      rel="stylesheet"
-      href="{{ url_for('static', filename='css/dashboard.css') }}"
-    />
+    <style>
+      /* ==========================================
+           STUDENT ERP - DASHBOARD ONLY
+           ========================================== */
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: Arial, Helvetica, sans-serif;
+        background: #f5f7fb;
+        color: #1f2937;
+      }
+
+      /* ==========================================
+           HEADER
+           ========================================== */
+
+      .dashboard-header {
+        background: linear-gradient(135deg, #0d6efd, #1e40af);
+        color: white;
+        padding: 18px 6%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        min-height: 78px;
+      }
+
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+
+      .brand-icon {
+        font-size: 30px;
+      }
+
+      .brand-text h1 {
+        font-size: 25px;
+        font-weight: 700;
+        letter-spacing: 0.2px;
+      }
+
+      .brand-text p {
+        font-size: 12px;
+        margin-top: 3px;
+        opacity: 0.9;
+      }
+
+      .header-actions {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .profile-button,
+      .logout-button {
+        text-decoration: none;
+        padding: 9px 15px;
+        border-radius: 7px;
+        font-size: 13px;
+        font-weight: 600;
+        transition: 0.2s ease;
+      }
+
+      .profile-button {
+        color: white;
+        background: rgba(255, 255, 255, 0.14);
+        border: 1px solid rgba(255, 255, 255, 0.35);
+      }
+
+      .profile-button:hover {
+        background: white;
+        color: #1455c7;
+      }
+
+      .logout-button {
+        color: white;
+        background: #dc3545;
+        border: 1px solid #dc3545;
+      }
+
+      .logout-button:hover {
+        background: #bb2d3b;
+      }
+
+      /* ==========================================
+           MAIN
+           ========================================== */
+
+      .dashboard-container {
+        width: 88%;
+        max-width: 1180px;
+        margin: 28px auto 45px;
+      }
+
+      /* ==========================================
+           WELCOME SECTION
+           ========================================== */
+
+      .welcome-section {
+        background: white;
+        border-radius: 12px;
+        border: 1px solid #e5eaf1;
+        box-shadow: 0 3px 12px rgba(15, 23, 42, 0.06);
+        padding: 22px 25px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 22px;
+      }
+
+      .welcome-content h2 {
+        color: #173b82;
+        font-size: 22px;
+        margin-bottom: 7px;
+      }
+
+      .welcome-content p {
+        color: #6b7280;
+        font-size: 13px;
+        line-height: 1.5;
+      }
+
+      .student-id-box {
+        background: #eef5ff;
+        border: 1px solid #d7e6ff;
+        color: #174a9c;
+        padding: 11px 17px;
+        border-radius: 8px;
+        white-space: nowrap;
+        font-size: 13px;
+      }
+
+      .student-id-box span {
+        font-weight: 700;
+      }
+
+      /* ==========================================
+           SECTION TITLE
+           ========================================== */
+
+      .section-title {
+        margin: 25px 0 13px;
+      }
+
+      .section-title h2 {
+        color: #173b82;
+        font-size: 20px;
+        margin-bottom: 4px;
+      }
+
+      .section-title p {
+        color: #6b7280;
+        font-size: 12px;
+      }
+
+      /* ==========================================
+           STUDENT INFORMATION
+           ========================================== */
+
+      .information-card {
+        background: white;
+        border: 1px solid #e5eaf1;
+        border-radius: 12px;
+        padding: 20px;
+        box-shadow: 0 3px 12px rgba(15, 23, 42, 0.05);
+      }
+
+      .information-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 12px;
+      }
+
+      .information-item {
+        background: #f8fafc;
+        border: 1px solid #e9edf3;
+        border-radius: 8px;
+        padding: 13px 15px;
+      }
+
+      .information-label {
+        display: block;
+        color: #6b7280;
+        font-size: 11px;
+        margin-bottom: 5px;
+        text-transform: uppercase;
+        letter-spacing: 0.3px;
+      }
+
+      .information-value {
+        color: #26364d;
+        font-size: 13px;
+        font-weight: 600;
+      }
+
+      /* ==========================================
+           ACADEMIC SERVICES
+           ========================================== */
+
+      .services-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 15px;
+      }
+
+      .service-card {
+        background: white;
+        border: 1px solid #e3e8ef;
+        border-radius: 11px;
+        padding: 18px;
+        min-height: 128px;
+        text-decoration: none;
+        color: #1f2937;
+        box-shadow: 0 3px 10px rgba(15, 23, 42, 0.045);
+        transition: all 0.2s ease;
+        display: block;
+      }
+
+      .service-card:hover {
+        transform: translateY(-3px);
+        border-color: #8eb9f5;
+        box-shadow: 0 7px 18px rgba(13, 110, 253, 0.11);
+      }
+
+      .service-icon {
+        width: 38px;
+        height: 38px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background: #eef5ff;
+        border-radius: 8px;
+        font-size: 20px;
+        margin-bottom: 11px;
+      }
+
+      .service-card h3 {
+        color: #173b82;
+        font-size: 15px;
+        margin-bottom: 5px;
+      }
+
+      .service-card p {
+        color: #6b7280;
+        font-size: 11px;
+        line-height: 1.45;
+      }
+
+      .service-arrow {
+        display: inline-block;
+        margin-top: 8px;
+        color: #0d6efd;
+        font-size: 12px;
+        font-weight: 600;
+      }
+
+      /* ==========================================
+           FOOTER
+           ========================================== */
+
+      .dashboard-footer {
+        text-align: center;
+        color: #7b8794;
+        font-size: 11px;
+        padding: 18px 10px 25px;
+      }
+
+      /* ==========================================
+           RESPONSIVE
+           ========================================== */
+
+      @media (max-width: 900px) {
+        .dashboard-header {
+          padding: 17px 4%;
+        }
+
+        .dashboard-container {
+          width: 92%;
+        }
+
+        .services-grid {
+          grid-template-columns: repeat(2, 1fr);
+        }
+
+        .information-grid {
+          grid-template-columns: repeat(2, 1fr);
+        }
+      }
+
+      @media (max-width: 600px) {
+        .dashboard-header {
+          flex-direction: column;
+          align-items: flex-start;
+          gap: 13px;
+        }
+
+        .header-actions {
+          width: 100%;
+        }
+
+        .dashboard-container {
+          width: 94%;
+          margin-top: 20px;
+        }
+
+        .welcome-section {
+          flex-direction: column;
+          align-items: flex-start;
+          gap: 15px;
+        }
+
+        .student-id-box {
+          width: 100%;
+        }
+
+        .information-grid,
+        .services-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .service-card {
+          min-height: 115px;
+        }
+      }
+    </style>
   </head>
 
   <body>
-    <div class="dashboard-container">
-      <!-- Header -->
-      <header class="dashboard-header">
-        <div>
+    <!-- ==========================================
+         HEADER
+         ========================================== -->
+
+    <header class="dashboard-header">
+      <div class="brand">
+        <div class="brand-icon">🎓</div>
+
+        <div class="brand-text">
           <h1>Student ERP</h1>
-          <p>Student Dashboard</p>
+          <p>Student Management Portal</p>
+        </div>
+      </div>
+
+      <div class="header-actions">
+        <a href="{{ url_for('profile') }}" class="profile-button">
+          👤 My Profile
+        </a>
+
+        <a href="{{ url_for('logout') }}" class="logout-button"> Logout </a>
+      </div>
+    </header>
+
+    <!-- ==========================================
+         MAIN DASHBOARD
+         ========================================== -->
+
+    <main class="dashboard-container">
+      <!-- WELCOME -->
+
+      <section class="welcome-section">
+        <div class="welcome-content">
+          <h2>Welcome, {{ student.name }}! 👋</h2>
+
+          <p>
+            Welcome to your Student ERP dashboard. Manage your academic
+            information easily from one place.
+          </p>
         </div>
 
-        <a href="/logout" class="logout-btn"> Logout </a>
-      </header>
+        <div class="student-id-box">
+          Student ID:
+          <span>{{ student.student_id }}</span>
+        </div>
+      </section>
 
-      <!-- Main Content -->
-      <main class="dashboard-content">
-        <h2>Welcome, {{ student.name }}! 👋</h2>
+      <!-- ==========================================
+             STUDENT INFORMATION
+             ========================================== -->
 
-        <p class="welcome-text">
-          Welcome to your student portal. Access your academic information and
-          student services from here.
+      <div class="section-title">
+        <h2>Student Information</h2>
+        <p>Your basic academic and contact information</p>
+      </div>
+
+      <section class="information-card">
+        <div class="information-grid">
+          <div class="information-item">
+            <span class="information-label">Name</span>
+            <span class="information-value"> {{ student.name }} </span>
+          </div>
+
+          <div class="information-item">
+            <span class="information-label">Student ID</span>
+            <span class="information-value"> {{ student.student_id }} </span>
+          </div>
+
+          <div class="information-item">
+            <span class="information-label">Department</span>
+            <span class="information-value"> {{ student.department }} </span>
+          </div>
+
+          <div class="information-item">
+            <span class="information-label">Year</span>
+            <span class="information-value"> {{ student.year }} </span>
+          </div>
+
+          <div class="information-item">
+            <span class="information-label">Section</span>
+            <span class="information-value"> {{ student.section }} </span>
+          </div>
+
+          <div class="information-item">
+            <span class="information-label">Email</span>
+            <span class="information-value"> {{ student.email }} </span>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==========================================
+             ACADEMIC SERVICES
+             ========================================== -->
+
+      <div class="section-title">
+        <h2>Academic Services</h2>
+        <p>
+          Select a service below. Each service has its own semester selection.
         </p>
+      </div>
 
-        <!-- Student Information -->
-        <div class="student-info">
-          <h3>Student Information</h3>
+      <section class="services-grid">
+        <!-- STUDENT PROFILE -->
 
-          <p>
-            <strong>Student ID:</strong>
-            {{ student.student_id }}
-          </p>
+        <a href="{{ url_for('profile') }}" class="service-card">
+          <div class="service-icon">👤</div>
 
-          <p>
-            <strong>Email:</strong>
-            {{ student.email }}
-          </p>
+          <h3>Student Profile</h3>
 
-          <p>
-            <strong>Department:</strong>
-            {{ student.department }}
-          </p>
+          <p>View your personal and academic information.</p>
 
-          <p>
-            <strong>Year:</strong>
-            {{ student.year }}
-          </p>
+          <span class="service-arrow"> View Profile → </span>
+        </a>
 
-          <p>
-            <strong>Semester:</strong>
-            {{ student.semester }}
-          </p>
+        <!-- FEES -->
 
-          <p>
-            <strong>Section:</strong>
-            {{ student.section }}
-          </p>
-        </div>
+        <a
+          href="{{ url_for('module_selector', module_name='fees') }}"
+          class="service-card"
+        >
+          <div class="service-icon">💳</div>
 
-        <!-- Student Modules -->
-        <div class="module-grid">
-          <!-- My Subjects -->
-          <a href="/subjects" class="module-card">
-            <h3>📚 My Subjects</h3>
+          <h3>Fees & Payments</h3>
 
-            <p>View the subjects you are enrolled in.</p>
-          </a>
+          <p>View semester-wise fee and payment details.</p>
 
-          <!-- Assigned Faculty -->
-          <a href="/assigned-faculty" class="module-card">
-            <h3>👨‍🏫 Assigned Faculty</h3>
+          <span class="service-arrow"> View Fees → </span>
+        </a>
 
-            <p>View faculty members assigned to your subjects.</p>
-          </a>
+        <!-- SUBJECTS -->
 
-          <!-- Attendance -->
-          <a href="/attendance" class="module-card">
-            <h3>📊 Attendance</h3>
+        <a
+          href="{{ url_for('module_selector', module_name='subjects') }}"
+          class="service-card"
+        >
+          <div class="service-icon">📚</div>
 
-            <p>View your subject-wise attendance.</p>
-          </a>
+          <h3>My Subjects</h3>
 
-          <!-- Marks & Results -->
-          <a href="/marks" class="module-card">
-            <h3>📝 Marks & Results</h3>
+          <p>View subjects assigned for each semester.</p>
 
-            <p>View your academic marks and results.</p>
-          </a>
+          <span class="service-arrow"> View Subjects → </span>
+        </a>
 
-          <!-- Timetable -->
-          <a href="/timetable" class="module-card">
-            <h3>🗓️ Timetable</h3>
+        <!-- FACULTY -->
 
-            <p>View your class timetable.</p>
-          </a>
-        </div>
-      </main>
-    </div>
+        <a
+          href="{{ url_for('module_selector', module_name='faculty') }}"
+          class="service-card"
+        >
+          <div class="service-icon">👨‍🏫</div>
+
+          <h3>Assigned Faculty</h3>
+
+          <p>View faculty assigned to your subjects.</p>
+
+          <span class="service-arrow"> View Faculty → </span>
+        </a>
+
+        <!-- ATTENDANCE -->
+
+        <a
+          href="{{ url_for('module_selector', module_name='attendance') }}"
+          class="service-card"
+        >
+          <div class="service-icon">📊</div>
+
+          <h3>Attendance</h3>
+
+          <p>View subject-wise attendance records.</p>
+
+          <span class="service-arrow"> View Attendance → </span>
+        </a>
+
+        <!-- MARKS -->
+
+        <a
+          href="{{ url_for('module_selector', module_name='marks') }}"
+          class="service-card"
+        >
+          <div class="service-icon">🏆</div>
+
+          <h3>Marks & Results</h3>
+
+          <p>View semester-wise marks and results.</p>
+
+          <span class="service-arrow"> View Results → </span>
+        </a>
+
+        <!-- ASSIGNMENTS -->
+
+        <a
+          href="{{ url_for('module_selector', module_name='assignments') }}"
+          class="service-card"
+        >
+          <div class="service-icon">📝</div>
+
+          <h3>Assignments</h3>
+
+          <p>View assignments and submission status.</p>
+
+          <span class="service-arrow"> View Assignments → </span>
+        </a>
+
+        <!-- EXAMINATIONS -->
+
+        <a
+          href="{{ url_for('module_selector', module_name='examinations') }}"
+          class="service-card"
+        >
+          <div class="service-icon">📅</div>
+
+          <h3>Examinations</h3>
+
+          <p>View Mid and End-Term examination schedules.</p>
+
+          <span class="service-arrow"> View Exams → </span>
+        </a>
+
+        <!-- TIMETABLE -->
+
+        <a
+          href="{{ url_for('module_selector', module_name='timetable') }}"
+          class="service-card"
+        >
+          <div class="service-icon">🗓️</div>
+
+          <h3>Timetable</h3>
+
+          <p>View your semester-wise class timetable.</p>
+
+          <span class="service-arrow"> View Timetable → </span>
+        </a>
+      </section>
+    </main>
+
+    <!-- ==========================================
+         FOOTER
+         ========================================== -->
+
+    <footer class="dashboard-footer">
+      © 2026 Student ERP | Student Management Portal
+    </footer>
   </body>
 </html>
