@@ -46,7 +46,7 @@
         <div class="student-badge">
           <span>Student ID</span>
 
-          <strong> {{ student.student_id }} </strong>
+          <strong>{{ student.student_id }}</strong>
         </div>
       </section>
 
@@ -58,45 +58,45 @@
 
         <div class="student-info-grid">
           <div class="info-item">
-            <span class="info-label"> Full Name </span>
+            <span class="info-label">Full Name</span>
 
-            <strong> {{ student.name }} </strong>
+            <strong>{{ student.name }}</strong>
           </div>
 
           <div class="info-item">
-            <span class="info-label"> Student ID </span>
+            <span class="info-label">Student ID</span>
 
-            <strong> {{ student.student_id }} </strong>
+            <strong>{{ student.student_id }}</strong>
           </div>
 
           <div class="info-item">
-            <span class="info-label"> Email </span>
+            <span class="info-label">Email</span>
 
-            <strong> {{ student.email }} </strong>
+            <strong>{{ student.email }}</strong>
           </div>
 
           <div class="info-item">
-            <span class="info-label"> Phone </span>
+            <span class="info-label">Phone</span>
 
-            <strong> {{ student.phone }} </strong>
+            <strong>{{ student.phone }}</strong>
           </div>
 
           <div class="info-item">
-            <span class="info-label"> Department </span>
+            <span class="info-label">Department</span>
 
-            <strong> {{ student.department }} </strong>
+            <strong>{{ student.department }}</strong>
           </div>
 
           <div class="info-item">
-            <span class="info-label"> Year </span>
+            <span class="info-label">Year</span>
 
-            <strong> {{ student.year }} </strong>
+            <strong>{{ student.year }}</strong>
           </div>
 
           <div class="info-item">
-            <span class="info-label"> Section </span>
+            <span class="info-label">Section</span>
 
-            <strong> {{ student.section }} </strong>
+            <strong>{{ student.section }}</strong>
           </div>
         </div>
       </section>
@@ -109,27 +109,35 @@
 
         <div class="student-info-grid">
           <div class="info-item">
-            <span class="info-label"> Department </span>
+            <span class="info-label">Department</span>
 
-            <strong> {{ student.department }} </strong>
+            <strong>{{ student.department }}</strong>
           </div>
 
           <div class="info-item">
-            <span class="info-label"> Current Year </span>
+            <span class="info-label">Current Year</span>
 
-            <strong> {{ student.year }} </strong>
+            <strong>{{ student.year }}</strong>
           </div>
 
           <div class="info-item">
-            <span class="info-label"> Section </span>
+            <span class="info-label">Section</span>
 
-            <strong> {{ student.section }} </strong>
+            <strong>{{ student.section }}</strong>
           </div>
 
           <div class="info-item">
-            <span class="info-label"> Available Semesters </span>
+            <span class="info-label">Current Semester</span>
 
-            <strong> Semester 1 - Semester 5 </strong>
+            <strong>Semester {{ student.current_semester }}</strong>
+          </div>
+
+          <div class="info-item">
+            <span class="info-label">Available Semesters</span>
+
+            <strong>
+              Semester 1 - Semester {{ student.current_semester }}
+            </strong>
           </div>
         </div>
       </section>

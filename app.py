@@ -6,9 +6,9 @@ app = Flask(__name__)
 app.secret_key = "student_erp_secret_key"
 
 
-# =========================================================
+# ============================================================
 # DATABASE CONNECTION
-# =========================================================
+# ============================================================
 
 def get_db_connection():
     return mysql.connector.connect(
@@ -19,9 +19,37 @@ def get_db_connection():
     )
 
 
-# =========================================================
+# ============================================================
+# GET LOGGED-IN STUDENT
+# ============================================================
+
+def get_logged_in_student():
+    if "student_id" not in session:
+        return None
+
+    conn = get_db_connection()
+    cursor = conn.cursor(dictionary=True)
+
+    cursor.execute(
+        """
+        SELECT *
+        FROM students
+        WHERE student_id = %s
+        """,
+        (session["student_id"],)
+    )
+
+    student = cursor.fetchone()
+
+    cursor.close()
+    conn.close()
+
+    return student
+
+
+# ============================================================
 # LOGIN
-# =========================================================
+# ============================================================
 
 @app.route("/", methods=["GET", "POST"])
 def login():
@@ -56,7 +84,12 @@ def login():
         conn.close()
 
         if student:
+
             session["student_id"] = student["student_id"]
+
+            # Remove any previously selected semester
+            session.pop("semester", None)
+
             return redirect(url_for("dashboard"))
 
         return render_template(
@@ -67,32 +100,14 @@ def login():
     return render_template("login.html")
 
 
-# =========================================================
+# ============================================================
 # DASHBOARD
-# =========================================================
+# ============================================================
 
 @app.route("/dashboard")
 def dashboard():
 
-    if "student_id" not in session:
-        return redirect(url_for("login"))
-
-    conn = get_db_connection()
-    cursor = conn.cursor(dictionary=True)
-
-    cursor.execute(
-        """
-        SELECT *
-        FROM students
-        WHERE student_id = %s
-        """,
-        (session["student_id"],)
-    )
-
-    student = cursor.fetchone()
-
-    cursor.close()
-    conn.close()
+    student = get_logged_in_student()
 
     if student is None:
         session.clear()
@@ -104,32 +119,14 @@ def dashboard():
     )
 
 
-# =========================================================
+# ============================================================
 # STUDENT PROFILE
-# =========================================================
+# ============================================================
 
 @app.route("/profile")
 def profile():
 
-    if "student_id" not in session:
-        return redirect(url_for("login"))
-
-    conn = get_db_connection()
-    cursor = conn.cursor(dictionary=True)
-
-    cursor.execute(
-        """
-        SELECT *
-        FROM students
-        WHERE student_id = %s
-        """,
-        (session["student_id"],)
-    )
-
-    student = cursor.fetchone()
-
-    cursor.close()
-    conn.close()
+    student = get_logged_in_student()
 
     if student is None:
         session.clear()
@@ -141,9 +138,9 @@ def profile():
     )
 
 
-# =========================================================
+# ============================================================
 # MODULE INFORMATION
-# =========================================================
+# ============================================================
 
 MODULES = {
 
@@ -197,42 +194,68 @@ MODULES = {
 }
 
 
-# =========================================================
-# SELECT SEMESTER FOR A MODULE
-# =========================================================
+# ============================================================
+# SEMESTER SELECTION
+# ============================================================
 
 @app.route("/module/<module_name>")
 def module_selector(module_name):
 
-    if "student_id" not in session:
+    student = get_logged_in_student()
+
+    if student is None:
+        session.clear()
         return redirect(url_for("login"))
 
     if module_name not in MODULES:
         return redirect(url_for("dashboard"))
 
-    module = MODULES[module_name]
+    current_semester = student.get("current_semester")
+
+    if current_semester is None:
+        current_semester = 1
+
+    current_semester = int(current_semester)
+
+    # Keep the valid range between 1 and 8
+    current_semester = max(1, min(current_semester, 8))
 
     return render_template(
         "semester_select.html",
         module_name=module_name,
-        module=module
+        module=MODULES[module_name],
+        current_semester=current_semester
     )
 
 
-# =========================================================
-# DISPLAY SELECTED SEMESTER DATA
-# =========================================================
+# ============================================================
+# MODULE VIEW
+# ============================================================
 
 @app.route("/module/<module_name>/<int:semester>")
 def module_view(module_name, semester):
 
-    if "student_id" not in session:
+    student = get_logged_in_student()
+
+    if student is None:
+        session.clear()
         return redirect(url_for("login"))
 
     if module_name not in MODULES:
         return redirect(url_for("dashboard"))
 
-    if semester not in [1, 2, 3, 4, 5]:
+    current_semester = student.get("current_semester")
+
+    if current_semester is None:
+        current_semester = 1
+
+    current_semester = int(current_semester)
+
+    # Make sure current semester is always between 1 and 8
+    current_semester = max(1, min(current_semester, 8))
+
+    # Students can only access semesters up to their current semester
+    if semester < 1 or semester > current_semester:
         return redirect(
             url_for(
                 "module_selector",
@@ -246,10 +269,11 @@ def module_view(module_name, semester):
     cursor = conn.cursor(dictionary=True)
 
     data = []
+    message = None
 
-    # -----------------------------------------------------
+    # ========================================================
     # SUBJECTS
-    # -----------------------------------------------------
+    # ========================================================
 
     if module_name == "subjects":
 
@@ -268,10 +292,9 @@ def module_view(module_name, semester):
 
         data = cursor.fetchall()
 
-
-    # -----------------------------------------------------
+    # ========================================================
     # FACULTY
-    # -----------------------------------------------------
+    # ========================================================
 
     elif module_name == "faculty":
 
@@ -290,10 +313,9 @@ def module_view(module_name, semester):
 
         data = cursor.fetchall()
 
-
-    # -----------------------------------------------------
+    # ========================================================
     # ATTENDANCE
-    # -----------------------------------------------------
+    # ========================================================
 
     elif module_name == "attendance":
 
@@ -316,39 +338,54 @@ def module_view(module_name, semester):
         for row in data:
 
             if row["total_classes"] > 0:
+
                 row["percentage"] = round(
-                    (row["attended"] / row["total_classes"]) * 100,
+                    (
+                        row["attended"]
+                        / row["total_classes"]
+                    ) * 100,
                     2
                 )
+
             else:
+
                 row["percentage"] = 0
 
-
-    # -----------------------------------------------------
-    # MARKS
-    # -----------------------------------------------------
+    # ========================================================
+    # MARKS & RESULTS
+    # ========================================================
 
     elif module_name == "marks":
 
-        cursor.execute(
-            """
-            SELECT subject_code,
-                   subject_name,
-                   marks
-            FROM marks
-            WHERE student_id = %s
-              AND semester = %s
-            ORDER BY id
-            """,
-            (student_id, semester)
-        )
+        # Current semester marks are not released yet.
+        # Previous semester marks remain available normally.
 
-        data = cursor.fetchall()
+        if semester == current_semester:
 
+            message = (
+                "Marks are Not Available for the current semester."
+            )
 
-    # -----------------------------------------------------
+        else:
+
+            cursor.execute(
+                """
+                SELECT subject_code,
+                       subject_name,
+                       marks
+                FROM marks
+                WHERE student_id = %s
+                  AND semester = %s
+                ORDER BY id
+                """,
+                (student_id, semester)
+            )
+
+            data = cursor.fetchall()
+
+    # ========================================================
     # FEES
-    # -----------------------------------------------------
+    # ========================================================
 
     elif module_name == "fees":
 
@@ -368,10 +405,9 @@ def module_view(module_name, semester):
 
         data = cursor.fetchall()
 
-
-    # -----------------------------------------------------
+    # ========================================================
     # ASSIGNMENTS
-    # -----------------------------------------------------
+    # ========================================================
 
     elif module_name == "assignments":
 
@@ -392,10 +428,9 @@ def module_view(module_name, semester):
 
         data = cursor.fetchall()
 
-
-    # -----------------------------------------------------
+    # ========================================================
     # EXAMINATIONS
-    # -----------------------------------------------------
+    # ========================================================
 
     elif module_name == "examinations":
 
@@ -417,10 +452,9 @@ def module_view(module_name, semester):
 
         data = cursor.fetchall()
 
-
-    # -----------------------------------------------------
+    # ========================================================
     # TIMETABLE
-    # -----------------------------------------------------
+    # ========================================================
 
     elif module_name == "timetable":
 
@@ -436,7 +470,8 @@ def module_view(module_name, semester):
             WHERE student_id = %s
               AND semester = %s
             ORDER BY
-                FIELD(day,
+                FIELD(
+                    day,
                     'Monday',
                     'Tuesday',
                     'Wednesday',
@@ -451,7 +486,6 @@ def module_view(module_name, semester):
 
         data = cursor.fetchall()
 
-
     cursor.close()
     conn.close()
 
@@ -460,13 +494,15 @@ def module_view(module_name, semester):
         module_name=module_name,
         module=MODULES[module_name],
         semester=semester,
-        data=data
+        current_semester=current_semester,
+        data=data,
+        message=message
     )
 
 
-# =========================================================
+# ============================================================
 # LOGOUT
-# =========================================================
+# ============================================================
 
 @app.route("/logout")
 def logout():
@@ -476,9 +512,9 @@ def logout():
     return redirect(url_for("login"))
 
 
-# =========================================================
+# ============================================================
 # RUN APPLICATION
-# =========================================================
+# ============================================================
 
 if __name__ == "__main__":
     app.run(debug=True)
