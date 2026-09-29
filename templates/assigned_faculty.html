@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+```
+<title>Assigned Faculty - Student ERP</title>
+
+<style>
+    * {
+        box-sizing: border-box;
+    }
+
+    body {
+        margin: 0;
+        font-family: Arial, sans-serif;
+        background: #f4f7fb;
+        color: #1e293b;
+    }
+
+    .header {
+        background: #2563eb;
+        color: white;
+        padding: 18px 30px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .header h1 {
+        margin: 0;
+        font-size: 22px;
+    }
+
+    .back {
+        color: white;
+        text-decoration: none;
+    }
+
+    .container {
+        max-width: 1100px;
+        margin: 30px auto;
+        padding: 0 20px;
+    }
+
+    .student-info {
+        background: white;
+        padding: 20px;
+        border-radius: 16px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.06);
+        margin-bottom: 20px;
+    }
+
+    .student-info h2 {
+        margin-top: 0;
+        color: #2563eb;
+    }
+
+    .student-details {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px 25px;
+        color: #475569;
+    }
+
+    .selector {
+        background: white;
+        padding: 18px;
+        border-radius: 16px;
+        margin-bottom: 20px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.06);
+    }
+
+    select {
+        padding: 10px 14px;
+        border: 1px solid #cbd5e1;
+        border-radius: 8px;
+        font-size: 15px;
+    }
+
+    .faculty-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 18px;
+    }
+
+    .faculty-card {
+        background: white;
+        padding: 22px;
+        border-radius: 16px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.06);
+    }
+
+    .subject-code {
+        color: #64748b;
+        font-size: 13px;
+        font-weight: bold;
+    }
+
+    .subject-name {
+        font-size: 19px;
+        font-weight: bold;
+        margin: 8px 0 15px;
+    }
+
+    .faculty-name {
+        color: #2563eb;
+        font-weight: bold;
+        margin-bottom: 7px;
+    }
+
+    .faculty-email {
+        color: #475569;
+        word-break: break-word;
+    }
+
+    .credits {
+        margin-top: 12px;
+        color: #64748b;
+        font-size: 13px;
+    }
+
+    .empty {
+        background: white;
+        padding: 30px;
+        text-align: center;
+        border-radius: 16px;
+    }
+
+    @media (max-width: 700px) {
+        .faculty-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+```
+
+</head>
+
+<body>
+
+<header class="header">
+
+```
+<h1>Assigned Faculty</h1>
+
+<a href="{{ url_for('dashboard') }}" class="back">
+    ← Dashboard
+</a>
+```
+
+</header>
+
+<div class="container">
+
+```
+<!-- STUDENT INFORMATION -->
+
+<div class="student-info">
+
+    <h2>{{ student.name }}</h2>
+
+    <div class="student-details">
+
+        <span>
+            <strong>ID:</strong>
+            {{ student.student_id }}
+        </span>
+
+        <span>
+            <strong>Branch:</strong>
+            {{ student.branch_code }}
+        </span>
+
+        <span>
+            <strong>Year:</strong>
+            {{ student.year_number }}
+        </span>
+
+        <span>
+            <strong>Current Semester:</strong>
+            {{ student.current_semester }}
+        </span>
+
+        <span>
+            <strong>Email:</strong>
+            {{ student.email }}
+        </span>
+
+    </div>
+
+</div>
+
+<!-- SEMESTER SELECTOR -->
+
+<div class="selector">
+
+    <form method="GET" action="{{ url_for('assigned_faculty') }}">
+
+        <label for="semester">
+            <strong>Select Semester:</strong>
+        </label>
+
+        <select
+            id="semester"
+            name="semester"
+            onchange="this.form.submit()"
+        >
+
+            {% for sem in range(1, 9) %}
+
+                <option
+                    value="{{ sem }}"
+                    {% if sem == selected_semester %}
+                        selected
+                    {% endif %}
+                >
+                    Semester {{ sem }}
+                </option>
+
+            {% endfor %}
+
+        </select>
+
+    </form>
+
+</div>
+
+<!-- FACULTY -->
+
+{% if faculty_data %}
+
+    <div class="faculty-grid">
+
+        {% for faculty in faculty_data %}
+
+            <div class="faculty-card">
+
+                <div class="subject-code">
+                    {{ faculty.subject_code }}
+                </div>
+
+                <div class="subject-name">
+                    {{ faculty.subject_name }}
+                </div>
+
+                <div class="faculty-name">
+                    👨‍🏫 {{ faculty.faculty }}
+                </div>
+
+                <div class="faculty-email">
+                    ✉ {{ faculty.faculty_email }}
+                </div>
+
+                <div class="credits">
+                    Credits: {{ faculty.credits }}
+                </div>
+
+            </div>
+
+        {% endfor %}
+
+    </div>
+
+{% else %}
+
+    <div class="empty">
+        No subjects or faculty assignments found for Semester {{ selected_semester }}.
+    </div>
+
+{% endif %}
+```
+
+</div>
+
+</body>
+</html>

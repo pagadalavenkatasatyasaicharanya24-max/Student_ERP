@@ -1,0 +1,319 @@
+```html
+<!doctype html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Student ERP | My Subjects</title>
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='css/dashboard.css') }}"
+    >
+
+
+    <style>
+
+        .subject-card {
+
+            background: white;
+
+            padding: 22px;
+
+            border-radius: 16px;
+
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+
+            transition: 0.2s ease;
+
+        }
+
+
+        .subject-card:hover {
+
+            transform: translateY(-3px);
+
+        }
+
+
+        .subject-code {
+
+            color: #2563eb;
+
+            font-weight: bold;
+
+        }
+
+
+        .subject-details {
+
+            margin-top: 12px;
+
+        }
+
+
+        .subject-details p {
+
+            margin: 8px 0;
+
+        }
+
+
+        .page-info {
+
+            background: white;
+
+            padding: 18px 20px;
+
+            border-radius: 16px;
+
+            margin-bottom: 20px;
+
+            box-shadow: 0 4px 15px rgba(0,0,0,0.06);
+
+        }
+
+
+        .page-info strong {
+
+            color: #2563eb;
+
+        }
+
+
+        .no-subjects {
+
+            background: white;
+
+            padding: 30px;
+
+            border-radius: 16px;
+
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+
+            text-align: center;
+
+            color: #64748b;
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<div class="dashboard-container">
+
+
+    <!-- HEADER -->
+
+    <header class="dashboard-header">
+
+        <div>
+
+            <h1>
+                Student ERP
+            </h1>
+
+            <p>
+                My Subjects
+            </p>
+
+        </div>
+
+
+        <a
+            href="/dashboard"
+            class="logout-btn"
+        >
+            Dashboard
+        </a>
+
+    </header>
+
+
+    {% include '_sis_nav.html' %}
+
+
+    <!-- MAIN -->
+
+    <main class="dashboard-content">
+
+
+        <h2>
+            My Subjects 📚
+        </h2>
+
+
+        <p class="welcome-text">
+
+            View the subjects for your current semester.
+
+        </p>
+
+
+        <!-- CURRENT SEMESTER INFORMATION -->
+
+        <div class="page-info">
+
+            <p>
+
+                <strong>Branch:</strong>
+
+                {{ student.branch_code or 'Not Assigned' }}
+
+            </p>
+
+
+            <p>
+
+                <strong>Current Semester:</strong>
+
+                {% if student.current_semester %}
+
+                    Semester {{ student.current_semester }}
+
+                {% else %}
+
+                    Not Assigned
+
+                {% endif %}
+
+            </p>
+
+        </div>
+
+
+        <!-- SUBJECT CARDS -->
+
+        {% if subjects %}
+
+
+            <div class="module-grid">
+
+
+                {% for subject in subjects %}
+
+
+                    <div class="subject-card">
+
+
+                        <h3>
+
+                            {{ subject.subject_name }}
+
+                        </h3>
+
+
+                        <div class="subject-details">
+
+
+                            <!-- SUBJECT CODE -->
+
+                            <p>
+
+                                <strong>
+                                    Subject Code:
+                                </strong>
+
+                                <span class="subject-code">
+
+                                    {{ subject.subject_code }}
+
+                                </span>
+
+                            </p>
+
+
+                            <!-- BRANCH -->
+
+                            <p>
+
+                                <strong>
+                                    Branch:
+                                </strong>
+
+                                {{ subject.branch_code or 'Common' }}
+
+                            </p>
+
+
+                            <!-- SEMESTER -->
+
+                            <p>
+
+                                <strong>
+                                    Semester:
+                                </strong>
+
+                                {{ subject.semester_number }}
+
+                            </p>
+
+
+                            <!-- CREDITS -->
+
+                            <p>
+
+                                <strong>
+                                    Credits:
+                                </strong>
+
+                                {{ subject.credits or 0 }}
+
+                            </p>
+
+
+                        </div>
+
+
+                    </div>
+
+
+                {% endfor %}
+
+
+            </div>
+
+
+        {% else %}
+
+
+            <!-- NO SUBJECTS -->
+
+            <div class="no-subjects">
+
+                <h3>
+                    No Subjects Found
+                </h3>
+
+                <p>
+
+                    No subjects are currently available
+                    for your semester.
+
+                </p>
+
+            </div>
+
+
+        {% endif %}
+
+
+    </main>
+
+
+</div>
+
+
+</body>
+
+</html>
+```

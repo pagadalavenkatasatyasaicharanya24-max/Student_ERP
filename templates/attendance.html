@@ -1,0 +1,598 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Attendance - Student ERP</title>
+
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+
+        body {
+
+            margin: 0;
+
+            font-family: Arial, sans-serif;
+
+            background: #f5f8fc;
+
+            color: #1f2937;
+
+        }
+
+
+        .container {
+
+            max-width: 1100px;
+
+            margin: 0 auto;
+
+            padding: 30px 20px;
+
+        }
+
+
+        .header {
+
+            background: white;
+
+            border-radius: 16px;
+
+            padding: 25px;
+
+            margin-bottom: 25px;
+
+            box-shadow: 0 4px 15px rgba(0,0,0,0.06);
+
+        }
+
+
+        .header h1 {
+
+            margin: 0 0 8px;
+
+            color: #2563eb;
+
+        }
+
+
+        .header p {
+
+            margin: 5px 0;
+
+            color: #64748b;
+
+        }
+
+
+        .semester-box {
+
+            background: white;
+
+            padding: 20px;
+
+            border-radius: 16px;
+
+            margin-bottom: 25px;
+
+            box-shadow: 0 4px 15px rgba(0,0,0,0.06);
+
+        }
+
+
+        .semester-box label {
+
+            font-weight: bold;
+
+            margin-right: 10px;
+
+        }
+
+
+        select {
+
+            padding: 10px 15px;
+
+            border: 1px solid #cbd5e1;
+
+            border-radius: 8px;
+
+            font-size: 15px;
+
+            background: white;
+
+            cursor: pointer;
+
+        }
+
+
+        .summary {
+
+            background: white;
+
+            padding: 25px;
+
+            border-radius: 16px;
+
+            margin-bottom: 25px;
+
+            box-shadow: 0 4px 15px rgba(0,0,0,0.06);
+
+        }
+
+
+        .summary h2 {
+
+            margin-top: 0;
+
+            color: #1e40af;
+
+        }
+
+
+        .percentage {
+
+            font-size: 32px;
+
+            font-weight: bold;
+
+            color: #2563eb;
+
+        }
+
+
+        .table-card {
+
+            background: white;
+
+            padding: 20px;
+
+            border-radius: 16px;
+
+            box-shadow: 0 4px 15px rgba(0,0,0,0.06);
+
+            overflow-x: auto;
+
+        }
+
+
+        table {
+
+            width: 100%;
+
+            border-collapse: collapse;
+
+        }
+
+
+        th,
+        td {
+
+            padding: 15px;
+
+            text-align: left;
+
+            border-bottom: 1px solid #e5e7eb;
+
+        }
+
+
+        th {
+
+            background: #eff6ff;
+
+            color: #1e40af;
+
+        }
+
+
+        .good {
+
+            color: #15803d;
+
+            font-weight: bold;
+
+        }
+
+
+        .average {
+
+            color: #d97706;
+
+            font-weight: bold;
+
+        }
+
+
+        .low {
+
+            color: #dc2626;
+
+            font-weight: bold;
+
+        }
+
+
+        .not-recorded {
+
+            text-align: center;
+
+            padding: 40px;
+
+            color: #64748b;
+
+        }
+
+
+        .back {
+
+            display: inline-block;
+
+            margin-top: 25px;
+
+            text-decoration: none;
+
+            color: #2563eb;
+
+            font-weight: bold;
+
+        }
+
+
+        .back:hover {
+
+            text-decoration: underline;
+
+        }
+
+
+        @media (max-width: 700px) {
+
+            .container {
+
+                padding: 15px;
+
+            }
+
+
+            th,
+            td {
+
+                padding: 10px;
+
+                font-size: 14px;
+
+            }
+
+
+            .percentage {
+
+                font-size: 26px;
+
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<div class="container">
+
+
+    <!-- HEADER -->
+
+    <div class="header">
+
+        <h1>
+            Attendance
+        </h1>
+
+
+        <p>
+
+            <strong>
+                {{ student.name }}
+            </strong>
+
+            | {{ student.student_id }}
+
+        </p>
+
+
+        <p>
+
+            Branch:
+            {{ student.branch_code or 'Not Assigned' }}
+
+            |
+
+            Year:
+            {{ student.year_number or 'Not Assigned' }}
+
+        </p>
+
+    </div>
+
+
+
+    <!-- SEMESTER SELECTOR -->
+
+    <div class="semester-box">
+
+        <label for="semester">
+            Select Semester:
+        </label>
+
+
+        <select
+            id="semester"
+            onchange="changeSemester(this.value)"
+        >
+
+            {% for sem in range(1, current_semester + 1) %}
+
+                <option
+                    value="{{ sem }}"
+                    {% if sem == selected_semester %}
+                        selected
+                    {% endif %}
+                >
+
+                    Semester {{ sem }}
+
+                </option>
+
+            {% endfor %}
+
+        </select>
+
+    </div>
+
+
+
+    {% if attendance_data %}
+
+
+        <!-- OVERALL ATTENDANCE -->
+
+        <div class="summary">
+
+            <h2>
+
+                Semester {{ selected_semester }}
+                Attendance
+
+            </h2>
+
+
+            <div class="percentage">
+
+                {{ "%.2f"|format(overall_attendance) }}%
+
+            </div>
+
+
+            <p>
+
+                Overall attendance for this semester.
+
+            </p>
+
+        </div>
+
+
+
+        <!-- SUBJECT TABLE -->
+
+        <div class="table-card">
+
+            <table>
+
+                <thead>
+
+                    <tr>
+
+                        <th>
+                            Subject Code
+                        </th>
+
+                        <th>
+                            Subject Name
+                        </th>
+
+                        <th>
+                            Credits
+                        </th>
+
+                        <th>
+                            Attendance
+                        </th>
+
+                        <th>
+                            Status
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody>
+
+
+                {% for item in attendance_data %}
+
+                    <tr>
+
+
+                        <!-- SUBJECT CODE -->
+
+                        <td>
+
+                            {{ item.subject_code }}
+
+                        </td>
+
+
+
+                        <!-- SUBJECT NAME -->
+
+                        <td>
+
+                            {{ item.subject_name }}
+
+                        </td>
+
+
+
+                        <!-- CREDITS -->
+
+                        <td>
+
+                            {{ item.credits }}
+
+                        </td>
+
+
+
+                        <!-- ATTENDANCE -->
+
+                        <td>
+
+                            {% if item.attendance_percentage is not none %}
+
+                                {{ "%.2f"|format(item.attendance_percentage) }}%
+
+                            {% else %}
+
+                                Not Recorded
+
+                            {% endif %}
+
+                        </td>
+
+
+
+                        <!-- STATUS -->
+
+                        <td>
+
+                            {% if item.attendance_percentage is none %}
+
+                                <span class="not-recorded">
+                                    Not Recorded
+                                </span>
+
+                            {% elif item.attendance_percentage >= 75 %}
+
+                                <span class="good">
+                                    Good
+                                </span>
+
+                            {% elif item.attendance_percentage >= 65 %}
+
+                                <span class="average">
+                                    Average
+                                </span>
+
+                            {% else %}
+
+                                <span class="low">
+                                    Low
+                                </span>
+
+                            {% endif %}
+
+                        </td>
+
+
+                    </tr>
+
+                {% endfor %}
+
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+
+    {% else %}
+
+
+        <!-- NO ATTENDANCE -->
+
+        <div class="table-card">
+
+            <div class="not-recorded">
+
+                <h2>
+                    Attendance Not Recorded
+                </h2>
+
+
+                <p>
+
+                    No attendance records are available for
+
+                    Semester {{ selected_semester }}.
+
+                </p>
+
+            </div>
+
+        </div>
+
+
+    {% endif %}
+
+
+
+    <!-- BACK -->
+
+    <a
+        href="/dashboard"
+        class="back"
+    >
+
+        ← Back to Dashboard
+
+    </a>
+
+
+</div>
+
+
+
+<script>
+
+function changeSemester(semester) {
+
+    window.location.href =
+        "/attendance?semester=" + semester;
+
+}
+
+</script>
+
+
+</body>
+
+</html>
+```

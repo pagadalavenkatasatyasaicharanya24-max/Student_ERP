@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student ERP | Notices</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
+</head>
+<body>
+<div class="dashboard-container">
+    <header class="dashboard-header">
+        <div><h1>Student ERP</h1><p>Notice Board</p></div>
+        <a href="/dashboard" class="logout-btn">Dashboard</a>
+    </header>
+    {% include '_sis_nav.html' %}
+    <main class="dashboard-content">
+        <h2>Notices 📣</h2>
+        <div class="module-grid">
+            {% for notice in notices %}
+            <article class="subject-card">
+                <h3>{{ notice.title }}</h3>
+                <p>{{ notice.content }}</p>
+                <small>{{ notice.created_at }}</small>
+            </article>
+            {% else %}
+            <div class="subject-card"><h3>No Notices</h3><p>There are no notices yet.</p></div>
+            {% endfor %}
+        </div>
+    </main>
+</div>
+</body>
+</html>

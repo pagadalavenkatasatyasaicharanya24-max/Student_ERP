@@ -1,0 +1,233 @@
+<!doctype html>
+
+<html lang="en">
+
+<head>
+
+```
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Student ERP | Fees</title>
+
+<link
+    rel="stylesheet"
+    href="{{ url_for('static', filename='css/dashboard.css') }}"
+>
+
+<style>
+
+    .fee-summary {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+        gap: 15px;
+        margin-bottom: 25px;
+    }
+
+    .fee-box {
+        background: white;
+        padding: 20px;
+        border-radius: 16px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+        text-align: center;
+    }
+
+    .fee-box h4 {
+        color: #555;
+        margin: 0;
+    }
+
+    .fee-box strong {
+        display: block;
+        margin-top: 8px;
+        font-size: 22px;
+        color: #2563eb;
+    }
+
+    .fee-table {
+        width: 100%;
+        border-collapse: collapse;
+        background: white;
+        min-width: 750px;
+    }
+
+    .fee-table th,
+    .fee-table td {
+        padding: 13px;
+        border-bottom: 1px solid #e5e7eb;
+        text-align: center;
+    }
+
+    .fee-table th {
+        background: #f3f6ff;
+    }
+
+    .paid {
+        color: #16a34a;
+        font-weight: bold;
+    }
+
+    .pending {
+        color: #dc2626;
+        font-weight: bold;
+    }
+
+    .table-container {
+        overflow-x: auto;
+    }
+
+    .semester-title {
+        font-weight: 600;
+    }
+
+</style>
+```
+
+</head>
+
+<body>
+
+<div class="dashboard-container">
+
+```
+<header class="dashboard-header">
+
+    <div>
+        <h1>Student ERP</h1>
+        <p>Fee Management</p>
+    </div>
+
+    <a href="/dashboard" class="logout-btn">
+        Dashboard
+    </a>
+
+</header>
+
+
+{% include '_sis_nav.html' %}
+
+
+<main class="dashboard-content">
+
+    <h2>Fee Details 💳</h2>
+
+    <p class="welcome-text">
+        View your semester-wise fee payment details.
+    </p>
+
+
+    <!-- SUMMARY -->
+
+    <div class="fee-summary">
+
+        <div class="fee-box">
+
+            <h4>Total Fee</h4>
+
+            <strong>
+                ₹{{ "%.2f"|format(fee_totals.total_fee or 0) }}
+            </strong>
+
+        </div>
+
+
+        <div class="fee-box">
+
+            <h4>Total Paid</h4>
+
+            <strong>
+                ₹{{ "%.2f"|format(fee_totals.total_paid or 0) }}
+            </strong>
+
+        </div>
+
+
+        <div class="fee-box">
+
+            <h4>Total Pending</h4>
+
+            <strong>
+                ₹{{ "%.2f"|format(fee_totals.total_pending or 0) }}
+            </strong>
+
+        </div>
+
+    </div>
+
+
+    <!-- FEE TABLE -->
+
+    <div class="table-container">
+
+        <table class="fee-table">
+
+            <thead>
+
+                <tr>
+                    <th>Semester</th>
+                    <th>Academic Year</th>
+                    <th>Total Fee</th>
+                    <th>Amount Paid</th>
+                    <th>Pending Amount</th>
+                    <th>Status</th>
+                </tr>
+
+            </thead>
+
+
+            <tbody>
+
+            {% for fee in fee_data %}
+
+                <tr>
+
+                    <td class="semester-title">
+                        Semester {{ fee.semester_number }}
+                    </td>
+
+                    <td>
+                        {{ fee.academic_year }}
+                    </td>
+
+                    <td>
+                        ₹{{ "%.2f"|format(fee.total_fee or 0) }}
+                    </td>
+
+                    <td>
+                        ₹{{ "%.2f"|format(fee.amount_paid or 0) }}
+                    </td>
+
+                    <td>
+                        ₹{{ "%.2f"|format(fee.pending_amount or 0) }}
+                    </td>
+
+                    <td class="{% if fee.payment_status == 'Paid' %}paid{% else %}pending{% endif %}">
+                        {{ fee.payment_status }}
+                    </td>
+
+                </tr>
+
+            {% else %}
+
+                <tr>
+                    <td colspan="6">
+                        No fee records available.
+                    </td>
+                </tr>
+
+            {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</main>
+```
+
+</div>
+
+</body>
+
+</html>

@@ -1,0 +1,671 @@
+```html
+<!doctype html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Student ERP | Marks & Results</title>
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='css/dashboard.css') }}"
+    >
+
+    <style>
+
+        .student-header {
+            background: white;
+            padding: 20px;
+            border-radius: 16px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            margin-bottom: 20px;
+        }
+
+        .student-header h3 {
+            margin-bottom: 8px;
+        }
+
+        .semester-selector {
+            background: white;
+            padding: 20px;
+            border-radius: 16px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            margin-bottom: 20px;
+        }
+
+        .semester-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .semester-buttons a {
+            text-decoration: none;
+            padding: 10px 16px;
+            border-radius: 10px;
+            background: #e5edff;
+            color: #2563eb;
+            font-weight: 600;
+        }
+
+        .semester-buttons a:hover {
+            background: #dbe7ff;
+        }
+
+        .semester-buttons a.active {
+            background: #2563eb;
+            color: white;
+        }
+
+        .result-card {
+            background: white;
+            padding: 20px;
+            border-radius: 16px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            margin-bottom: 20px;
+            overflow-x: auto;
+        }
+
+        .marks-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+            min-width: 700px;
+        }
+
+        .marks-table th,
+        .marks-table td {
+            padding: 13px;
+            text-align: left;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .marks-table th {
+            background: #f3f6ff;
+            color: #1e3a8a;
+        }
+
+        .grade {
+            font-weight: bold;
+            color: #2563eb;
+        }
+
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .summary-box {
+            padding: 18px;
+            background: #f5f8ff;
+            border-radius: 14px;
+            text-align: center;
+        }
+
+        .summary-box h4 {
+            margin-bottom: 8px;
+            color: #555;
+        }
+
+        .summary-box strong {
+            font-size: 24px;
+            color: #2563eb;
+        }
+
+        .history-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+            min-width: 600px;
+        }
+
+        .history-table th,
+        .history-table td {
+            padding: 12px;
+            border-bottom: 1px solid #e5e7eb;
+            text-align: center;
+        }
+
+        .history-table th {
+            background: #f3f6ff;
+            color: #1e3a8a;
+        }
+
+        .history-table a {
+            color: #2563eb;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .history-table a:hover {
+            text-decoration: underline;
+        }
+
+        .backlog {
+            color: #dc2626 !important;
+            font-weight: bold;
+        }
+
+        .no-data {
+            padding: 15px;
+            color: #666;
+        }
+
+        .grading-table {
+            min-width: 450px;
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+<div class="dashboard-container">
+
+
+    <!-- HEADER -->
+
+    <header class="dashboard-header">
+
+        <div>
+
+            <h1>Student ERP</h1>
+
+            <p>Marks & Results</p>
+
+        </div>
+
+        <a href="/dashboard" class="logout-btn">
+            Dashboard
+        </a>
+
+    </header>
+
+
+    {% include '_sis_nav.html' %}
+
+
+    <!-- MAIN CONTENT -->
+
+    <main class="dashboard-content">
+
+
+        <h2>Marks & Results 📝</h2>
+
+        <p class="welcome-text">
+            View your semester-wise marks, grades, SGPA, CGPA and academic history.
+        </p>
+
+
+        <!-- STUDENT DETAILS -->
+
+        <div class="student-header">
+
+            <h3>
+                {{ student.name }}
+            </h3>
+
+            <p>
+                <strong>Student ID:</strong>
+                {{ student.student_id }}
+            </p>
+
+            <p>
+                <strong>Branch:</strong>
+                {{ student.branch_code or 'Not Assigned' }}
+            </p>
+
+            <p>
+                <strong>Current Semester:</strong>
+                {% if student.current_semester %}
+                    Semester {{ student.current_semester }}
+                {% else %}
+                    Not Assigned
+                {% endif %}
+            </p>
+
+        </div>
+
+
+        <!-- ACADEMIC HISTORY / SEMESTER SELECTOR -->
+
+        <div class="semester-selector">
+
+            <h3>
+                Academic History
+            </h3>
+
+            <p>
+                Select a semester to view your marks and grades.
+            </p>
+
+
+            <div class="semester-buttons">
+
+                {% for semester in range(1, current_semester + 1) %}
+
+                    <a
+                        href="/marks?semester={{ semester }}"
+                        class="{% if semester == selected_semester %}active{% endif %}"
+                    >
+                        Semester {{ semester }}
+                    </a>
+
+                {% endfor %}
+
+            </div>
+
+        </div>
+
+
+        <!-- SELECTED SEMESTER MARKS -->
+
+        <div class="result-card">
+
+            <h3>
+                Semester {{ selected_semester }} Marks
+            </h3>
+
+
+            {% if marks_data %}
+
+                <table class="marks-table">
+
+                    <thead>
+
+                        <tr>
+
+                            <th>Semester</th>
+
+                            <th>Subject Code</th>
+
+                            <th>Subject Name</th>
+
+                            <th>Marks</th>
+
+                            <th>Grade</th>
+
+                            <th>Grade Point</th>
+
+                            <th>Credits</th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+                    {% for record in marks_data %}
+
+                        <tr>
+
+                            <td>
+                                {{ record.semester_number }}
+                            </td>
+
+                            <td>
+                                {{ record.subject_code }}
+                            </td>
+
+                            <td>
+                                {{ record.subject_name }}
+                            </td>
+
+                            <td>
+                                {{ "%.2f"|format(record.marks) }}
+                            </td>
+
+                            <td class="grade">
+                                {{ record.grade }}
+                            </td>
+
+                            <td>
+                                {{ record.grade_point }}
+                            </td>
+
+                            <td>
+                                {{ record.credits }}
+                            </td>
+
+                        </tr>
+
+                    {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            {% else %}
+
+                <p class="no-data">
+                    No marks available for Semester {{ selected_semester }}.
+                </p>
+
+            {% endif %}
+
+        </div>
+
+
+        <!-- SELECTED SEMESTER SUMMARY -->
+
+        {% for result in semester_results %}
+
+            {% if result.semester_number == selected_semester %}
+
+                <div class="result-card">
+
+                    <h3>
+                        Semester {{ selected_semester }} Summary
+                    </h3>
+
+
+                    <div class="summary-grid">
+
+
+                        <!-- SGPA -->
+
+                        <div class="summary-box">
+
+                            <h4>
+                                SGPA
+                            </h4>
+
+                            <strong>
+                                {{ "%.2f"|format(result.sgpa) }}
+                            </strong>
+
+                        </div>
+
+
+                        <!-- PERCENTAGE -->
+
+                        <div class="summary-box">
+
+                            <h4>
+                                Percentage
+                            </h4>
+
+                            <strong>
+                                {{ "%.2f"|format(result.percentage) }}%
+                            </strong>
+
+                        </div>
+
+
+                        <!-- BACKLOGS -->
+
+                        <div class="summary-box">
+
+                            <h4>
+                                Backlogs
+                            </h4>
+
+                            <strong
+                                class="{% if result.backlog_count > 0 %}backlog{% endif %}"
+                            >
+                                {{ result.backlog_count }}
+                            </strong>
+
+                        </div>
+
+
+                    </div>
+
+                </div>
+
+            {% endif %}
+
+        {% endfor %}
+
+
+        <!-- COMPLETE ACADEMIC HISTORY -->
+
+        <div class="result-card">
+
+            <h3>
+                Semester-wise Results
+            </h3>
+
+
+            {% if semester_results %}
+
+                <table class="history-table">
+
+                    <thead>
+
+                        <tr>
+
+                            <th>Semester</th>
+
+                            <th>SGPA</th>
+
+                            <th>Percentage</th>
+
+                            <th>Backlogs</th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+                    {% for result in semester_results %}
+
+                        <tr>
+
+                            <td>
+
+                                <a
+                                    href="/marks?semester={{ result.semester_number }}"
+                                >
+                                    Semester {{ result.semester_number }}
+                                </a>
+
+                            </td>
+
+
+                            <td>
+                                {{ "%.2f"|format(result.sgpa) }}
+                            </td>
+
+
+                            <td>
+                                {{ "%.2f"|format(result.percentage) }}%
+                            </td>
+
+
+                            <td
+                                class="{% if result.backlog_count > 0 %}backlog{% endif %}"
+                            >
+                                {{ result.backlog_count }}
+                            </td>
+
+                        </tr>
+
+                    {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            {% else %}
+
+                <p class="no-data">
+                    No semester results available.
+                </p>
+
+            {% endif %}
+
+        </div>
+
+
+        <!-- CONSOLIDATED GRADE SHEET -->
+
+        <div class="result-card">
+
+            <h3>
+                Consolidated Grade Sheet
+            </h3>
+
+
+            {% if consolidated_result %}
+
+                <div class="summary-grid">
+
+
+                    <!-- CGPA -->
+
+                    <div class="summary-box">
+
+                        <h4>
+                            CGPA
+                        </h4>
+
+                        <strong>
+                            {{ "%.2f"|format(consolidated_result.cgpa) }}
+                        </strong>
+
+                    </div>
+
+
+                    <!-- OVERALL PERCENTAGE -->
+
+                    <div class="summary-box">
+
+                        <h4>
+                            Overall Percentage
+                        </h4>
+
+                        <strong>
+                            {{ "%.2f"|format(consolidated_result.percentage) }}%
+                        </strong>
+
+                    </div>
+
+
+                    <!-- TOTAL BACKLOGS -->
+
+                    <div class="summary-box">
+
+                        <h4>
+                            Total Backlogs
+                        </h4>
+
+                        <strong
+                            class="{% if consolidated_result.total_backlogs > 0 %}backlog{% endif %}"
+                        >
+                            {{ consolidated_result.total_backlogs }}
+                        </strong>
+
+                    </div>
+
+
+                </div>
+
+            {% else %}
+
+                <p class="no-data">
+                    Consolidated result is not available.
+                </p>
+
+            {% endif %}
+
+        </div>
+
+
+        <!-- GRADING SYSTEM -->
+
+        <div class="result-card">
+
+            <h3>
+                Grading System
+            </h3>
+
+
+            <table class="history-table grading-table">
+
+                <thead>
+
+                    <tr>
+
+                        <th>Grade</th>
+
+                        <th>Grade Point</th>
+
+                        <th>Marks</th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody>
+
+                    <tr>
+                        <td>O</td>
+                        <td>10</td>
+                        <td>90 - 100</td>
+                    </tr>
+
+                    <tr>
+                        <td>A+</td>
+                        <td>9</td>
+                        <td>80 - 89</td>
+                    </tr>
+
+                    <tr>
+                        <td>A</td>
+                        <td>8</td>
+                        <td>70 - 79</td>
+                    </tr>
+
+                    <tr>
+                        <td>B+</td>
+                        <td>7</td>
+                        <td>60 - 69</td>
+                    </tr>
+
+                    <tr>
+                        <td>B</td>
+                        <td>6</td>
+                        <td>50 - 59</td>
+                    </tr>
+
+                    <tr>
+                        <td>C</td>
+                        <td>5</td>
+                        <td>40 - 49</td>
+                    </tr>
+
+                    <tr>
+                        <td>F</td>
+                        <td>0</td>
+                        <td>Below 40</td>
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+
+    </main>
+
+</div>
+
+</body>
+
+</html>
+```

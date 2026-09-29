@@ -1,586 +1,316 @@
-<!doctype html>
+<!DOCTYPE html>
+
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Student ERP - Dashboard</title>
+```
+<title>Student ERP - Dashboard</title>
 
-    <style>
-      /* ==========================================
-           STUDENT ERP - DASHBOARD ONLY
-           ========================================== */
-
-      * {
-        margin: 0;
-        padding: 0;
+<style>
+    * {
         box-sizing: border-box;
-      }
+    }
 
-      body {
-        font-family: Arial, Helvetica, sans-serif;
-        background: #f5f7fb;
-        color: #1f2937;
-      }
+    body {
+        margin: 0;
+        font-family: Arial, sans-serif;
+        background: #f4f7fb;
+        color: #1e293b;
+    }
 
-      /* ==========================================
-           HEADER
-           ========================================== */
-
-      .dashboard-header {
-        background: linear-gradient(135deg, #0d6efd, #1e40af);
+    .header {
+        background: #2563eb;
         color: white;
-        padding: 18px 6%;
+        padding: 18px 30px;
         display: flex;
         justify-content: space-between;
         align-items: center;
-        min-height: 78px;
-      }
+    }
 
-      .brand {
-        display: flex;
-        align-items: center;
-        gap: 12px;
-      }
-
-      .brand-icon {
-        font-size: 30px;
-      }
-
-      .brand-text h1 {
-        font-size: 25px;
-        font-weight: 700;
-        letter-spacing: 0.2px;
-      }
-
-      .brand-text p {
-        font-size: 12px;
-        margin-top: 3px;
-        opacity: 0.9;
-      }
-
-      .header-actions {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-      }
-
-      .profile-button,
-      .logout-button {
-        text-decoration: none;
-        padding: 9px 15px;
-        border-radius: 7px;
-        font-size: 13px;
-        font-weight: 600;
-        transition: 0.2s ease;
-      }
-
-      .profile-button {
-        color: white;
-        background: rgba(255, 255, 255, 0.14);
-        border: 1px solid rgba(255, 255, 255, 0.35);
-      }
-
-      .profile-button:hover {
-        background: white;
-        color: #1455c7;
-      }
-
-      .logout-button {
-        color: white;
-        background: #dc3545;
-        border: 1px solid #dc3545;
-      }
-
-      .logout-button:hover {
-        background: #bb2d3b;
-      }
-
-      /* ==========================================
-           MAIN
-           ========================================== */
-
-      .dashboard-container {
-        width: 88%;
-        max-width: 1180px;
-        margin: 28px auto 45px;
-      }
-
-      /* ==========================================
-           WELCOME SECTION
-           ========================================== */
-
-      .welcome-section {
-        background: white;
-        border-radius: 12px;
-        border: 1px solid #e5eaf1;
-        box-shadow: 0 3px 12px rgba(15, 23, 42, 0.06);
-        padding: 22px 25px;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 22px;
-      }
-
-      .welcome-content h2 {
-        color: #173b82;
+    .header h1 {
+        margin: 0;
         font-size: 22px;
-        margin-bottom: 7px;
-      }
+    }
 
-      .welcome-content p {
-        color: #6b7280;
-        font-size: 13px;
-        line-height: 1.5;
-      }
-
-      .student-id-box {
-        background: #eef5ff;
-        border: 1px solid #d7e6ff;
-        color: #174a9c;
-        padding: 11px 17px;
-        border-radius: 8px;
-        white-space: nowrap;
-        font-size: 13px;
-      }
-
-      .student-id-box span {
-        font-weight: 700;
-      }
-
-      /* ==========================================
-           SECTION TITLE
-           ========================================== */
-
-      .section-title {
-        margin: 25px 0 13px;
-      }
-
-      .section-title h2 {
-        color: #173b82;
-        font-size: 20px;
-        margin-bottom: 4px;
-      }
-
-      .section-title p {
-        color: #6b7280;
-        font-size: 12px;
-      }
-
-      /* ==========================================
-           STUDENT INFORMATION
-           ========================================== */
-
-      .information-card {
-        background: white;
-        border: 1px solid #e5eaf1;
-        border-radius: 12px;
-        padding: 20px;
-        box-shadow: 0 3px 12px rgba(15, 23, 42, 0.05);
-      }
-
-      .information-grid {
-        display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        gap: 12px;
-      }
-
-      .information-item {
-        background: #f8fafc;
-        border: 1px solid #e9edf3;
-        border-radius: 8px;
-        padding: 13px 15px;
-      }
-
-      .information-label {
-        display: block;
-        color: #6b7280;
-        font-size: 11px;
-        margin-bottom: 5px;
-        text-transform: uppercase;
-        letter-spacing: 0.3px;
-      }
-
-      .information-value {
-        color: #26364d;
-        font-size: 13px;
-        font-weight: 600;
-      }
-
-      /* ==========================================
-           ACADEMIC SERVICES
-           ========================================== */
-
-      .services-grid {
-        display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        gap: 15px;
-      }
-
-      .service-card {
-        background: white;
-        border: 1px solid #e3e8ef;
-        border-radius: 11px;
-        padding: 18px;
-        min-height: 128px;
+    .logout {
+        color: white;
         text-decoration: none;
-        color: #1f2937;
-        box-shadow: 0 3px 10px rgba(15, 23, 42, 0.045);
-        transition: all 0.2s ease;
-        display: block;
-      }
-
-      .service-card:hover {
-        transform: translateY(-3px);
-        border-color: #8eb9f5;
-        box-shadow: 0 7px 18px rgba(13, 110, 253, 0.11);
-      }
-
-      .service-icon {
-        width: 38px;
-        height: 38px;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        background: #eef5ff;
+        background: rgba(255,255,255,0.15);
+        padding: 9px 16px;
         border-radius: 8px;
-        font-size: 20px;
-        margin-bottom: 11px;
-      }
+    }
 
-      .service-card h3 {
-        color: #173b82;
-        font-size: 15px;
+    .container {
+        max-width: 1200px;
+        margin: 30px auto;
+        padding: 0 20px;
+    }
+
+    .welcome {
+        margin-bottom: 25px;
+    }
+
+    .welcome h2 {
+        margin-bottom: 6px;
+    }
+
+    .student-card {
+        background: white;
+        border-radius: 16px;
+        padding: 25px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.06);
+        margin-bottom: 25px;
+    }
+
+    .student-card h3 {
+        margin-top: 0;
+        color: #2563eb;
+    }
+
+    .details {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 18px;
+    }
+
+    .detail {
+        background: #f8fafc;
+        padding: 15px;
+        border-radius: 10px;
+    }
+
+    .label {
+        font-size: 13px;
+        color: #64748b;
         margin-bottom: 5px;
-      }
+    }
 
-      .service-card p {
-        color: #6b7280;
-        font-size: 11px;
-        line-height: 1.45;
-      }
+    .value {
+        font-weight: bold;
+        word-break: break-word;
+    }
 
-      .service-arrow {
-        display: inline-block;
-        margin-top: 8px;
-        color: #0d6efd;
-        font-size: 12px;
-        font-weight: 600;
-      }
+    .cards {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 18px;
+        margin-bottom: 25px;
+    }
 
-      /* ==========================================
-           FOOTER
-           ========================================== */
+    .card {
+        background: white;
+        padding: 22px;
+        border-radius: 16px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.06);
+    }
 
-      .dashboard-footer {
-        text-align: center;
-        color: #7b8794;
-        font-size: 11px;
-        padding: 18px 10px 25px;
-      }
+    .card h4 {
+        margin: 0 0 10px;
+        color: #64748b;
+    }
 
-      /* ==========================================
-           RESPONSIVE
-           ========================================== */
+    .number {
+        font-size: 25px;
+        font-weight: bold;
+        color: #2563eb;
+    }
 
-      @media (max-width: 900px) {
-        .dashboard-header {
-          padding: 17px 4%;
+    .navigation {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 15px;
+    }
+
+    .navigation a {
+        text-decoration: none;
+        background: white;
+        padding: 18px;
+        border-radius: 12px;
+        color: #1e293b;
+        font-weight: bold;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        transition: 0.2s;
+    }
+
+    .navigation a:hover {
+        background: #eff6ff;
+        color: #2563eb;
+    }
+
+    @media (max-width: 800px) {
+        .details,
+        .cards,
+        .navigation {
+            grid-template-columns: 1fr 1fr;
+        }
+    }
+
+    @media (max-width: 500px) {
+        .details,
+        .cards,
+        .navigation {
+            grid-template-columns: 1fr;
         }
 
-        .dashboard-container {
-          width: 92%;
+        .header {
+            padding: 15px;
         }
+    }
+</style>
+```
 
-        .services-grid {
-          grid-template-columns: repeat(2, 1fr);
-        }
+</head>
 
-        .information-grid {
-          grid-template-columns: repeat(2, 1fr);
-        }
-      }
+<body>
 
-      @media (max-width: 600px) {
-        .dashboard-header {
-          flex-direction: column;
-          align-items: flex-start;
-          gap: 13px;
-        }
+<header class="header">
+    <h1>Student ERP</h1>
+    <a href="{{ url_for('logout') }}" class="logout">Logout</a>
+</header>
 
-        .header-actions {
-          width: 100%;
-        }
+<div class="container">
 
-        .dashboard-container {
-          width: 94%;
-          margin-top: 20px;
-        }
+```
+<div class="welcome">
+    <h2>Welcome, {{ student.name }}</h2>
+    <p>Your academic information</p>
+</div>
 
-        .welcome-section {
-          flex-direction: column;
-          align-items: flex-start;
-          gap: 15px;
-        }
+<!-- STUDENT DETAILS -->
 
-        .student-id-box {
-          width: 100%;
-        }
+<div class="student-card">
 
-        .information-grid,
-        .services-grid {
-          grid-template-columns: 1fr;
-        }
+    <h3>Student Profile</h3>
 
-        .service-card {
-          min-height: 115px;
-        }
-      }
-    </style>
-  </head>
+    <div class="details">
 
-  <body>
-    <!-- ==========================================
-         HEADER
-         ========================================== -->
-
-    <header class="dashboard-header">
-      <div class="brand">
-        <div class="brand-icon">🎓</div>
-
-        <div class="brand-text">
-          <h1>Student ERP</h1>
-          <p>Student Management Portal</p>
-        </div>
-      </div>
-
-      <div class="header-actions">
-        <a href="{{ url_for('profile') }}" class="profile-button">
-          👤 My Profile
-        </a>
-
-        <a href="{{ url_for('logout') }}" class="logout-button"> Logout </a>
-      </div>
-    </header>
-
-    <!-- ==========================================
-         MAIN DASHBOARD
-         ========================================== -->
-
-    <main class="dashboard-container">
-      <!-- WELCOME -->
-
-      <section class="welcome-section">
-        <div class="welcome-content">
-          <h2>Welcome, {{ student.name }}! 👋</h2>
-
-          <p>
-            Welcome to your Student ERP dashboard. Manage your academic
-            information easily from one place.
-          </p>
+        <div class="detail">
+            <div class="label">Name</div>
+            <div class="value">{{ student.name }}</div>
         </div>
 
-        <div class="student-id-box">
-          Student ID:
-          <span>{{ student.student_id }}</span>
+        <div class="detail">
+            <div class="label">Student ID</div>
+            <div class="value">{{ student.student_id }}</div>
         </div>
-      </section>
 
-      <!-- ==========================================
-             STUDENT INFORMATION
-             ========================================== -->
-
-      <div class="section-title">
-        <h2>Student Information</h2>
-        <p>Your basic academic and contact information</p>
-      </div>
-
-      <section class="information-card">
-        <div class="information-grid">
-          <div class="information-item">
-            <span class="information-label">Name</span>
-            <span class="information-value"> {{ student.name }} </span>
-          </div>
-
-          <div class="information-item">
-            <span class="information-label">Student ID</span>
-            <span class="information-value"> {{ student.student_id }} </span>
-          </div>
-
-          <div class="information-item">
-            <span class="information-label">Department</span>
-            <span class="information-value"> {{ student.department }} </span>
-          </div>
-
-          <div class="information-item">
-            <span class="information-label">Year</span>
-            <span class="information-value"> {{ student.year }} </span>
-          </div>
-
-          <div class="information-item">
-            <span class="information-label">Section</span>
-            <span class="information-value"> {{ student.section }} </span>
-          </div>
-
-          <div class="information-item">
-            <span class="information-label">Email</span>
-            <span class="information-value"> {{ student.email }} </span>
-          </div>
+        <div class="detail">
+            <div class="label">Email</div>
+            <div class="value">{{ student.email }}</div>
         </div>
-      </section>
 
-      <!-- ==========================================
-             ACADEMIC SERVICES
-             ========================================== -->
+        <div class="detail">
+            <div class="label">Branch</div>
+            <div class="value">{{ student.branch_code }}</div>
+        </div>
 
-      <div class="section-title">
-        <h2>Academic Services</h2>
-        <p>
-          Select a service below. Each service has its own semester selection.
-        </p>
-      </div>
+        <div class="detail">
+            <div class="label">Year</div>
+            <div class="value">{{ student.year_number }} Year</div>
+        </div>
 
-      <section class="services-grid">
-        <!-- STUDENT PROFILE -->
+        <div class="detail">
+            <div class="label">Current Semester</div>
+            <div class="value">Semester {{ student.current_semester }}</div>
+        </div>
 
-        <a href="{{ url_for('profile') }}" class="service-card">
-          <div class="service-icon">👤</div>
+        <div class="detail">
+            <div class="label">Joining Year</div>
+            <div class="value">{{ student.batch_year }}</div>
+        </div>
 
-          <h3>Student Profile</h3>
+    </div>
 
-          <p>View your personal and academic information.</p>
+</div>
 
-          <span class="service-arrow"> View Profile → </span>
-        </a>
+<!-- SUMMARY -->
 
-        <!-- FEES -->
+<div class="cards">
 
-        <a
-          href="{{ url_for('module_selector', module_name='fees') }}"
-          class="service-card"
-        >
-          <div class="service-icon">💳</div>
+    <div class="card">
+        <h4>Attendance</h4>
 
-          <h3>Fees & Payments</h3>
+        <div class="number">
+            {% if attendance is not none %}
+                {{ attendance }}%
+            {% else %}
+                N/A
+            {% endif %}
+        </div>
+    </div>
 
-          <p>View semester-wise fee and payment details.</p>
+    <div class="card">
+        <h4>CGPA</h4>
 
-          <span class="service-arrow"> View Fees → </span>
-        </a>
+        <div class="number">
+            {% if consolidated_result %}
+                {{ consolidated_result.cgpa }}
+            {% else %}
+                N/A
+            {% endif %}
+        </div>
+    </div>
 
-        <!-- SUBJECTS -->
+    <div class="card">
+        <h4>Percentage</h4>
 
-        <a
-          href="{{ url_for('module_selector', module_name='subjects') }}"
-          class="service-card"
-        >
-          <div class="service-icon">📚</div>
+        <div class="number">
+            {% if consolidated_result %}
+                {{ consolidated_result.percentage }}%
+            {% else %}
+                N/A
+            {% endif %}
+        </div>
+    </div>
 
-          <h3>My Subjects</h3>
+    <div class="card">
+        <h4>Pending Fees</h4>
 
-          <p>View subjects assigned for each semester.</p>
+        <div class="number">
+            ₹{{ "%.2f"|format(pending_fees) }}
+        </div>
+    </div>
 
-          <span class="service-arrow"> View Subjects → </span>
-        </a>
+</div>
 
-        <!-- FACULTY -->
+<!-- NAVIGATION -->
 
-        <a
-          href="{{ url_for('module_selector', module_name='faculty') }}"
-          class="service-card"
-        >
-          <div class="service-icon">👨‍🏫</div>
+<div class="navigation">
 
-          <h3>Assigned Faculty</h3>
+    <a href="{{ url_for('subjects') }}">
+        📚 Subjects
+    </a>
 
-          <p>View faculty assigned to your subjects.</p>
+    <a href="{{ url_for('assigned_faculty') }}">
+        👨‍🏫 Assigned Faculty
+    </a>
 
-          <span class="service-arrow"> View Faculty → </span>
-        </a>
+    <a href="{{ url_for('attendance') }}">
+        📊 Attendance
+    </a>
 
-        <!-- ATTENDANCE -->
+    <a href="{{ url_for('marks') }}">
+        📝 Marks & Results
+    </a>
 
-        <a
-          href="{{ url_for('module_selector', module_name='attendance') }}"
-          class="service-card"
-        >
-          <div class="service-icon">📊</div>
+    <a href="{{ url_for('fees') }}">
+        💳 Fees
+    </a>
 
-          <h3>Attendance</h3>
+    <a href="{{ url_for('notices') }}">
+        📢 Notices
+    </a>
 
-          <p>View subject-wise attendance records.</p>
+    <a href="{{ url_for('timetable') }}">
+        🗓 Timetable
+    </a>
 
-          <span class="service-arrow"> View Attendance → </span>
-        </a>
+</div>
+```
 
-        <!-- MARKS -->
+</div>
 
-        <a
-          href="{{ url_for('module_selector', module_name='marks') }}"
-          class="service-card"
-        >
-          <div class="service-icon">🏆</div>
-
-          <h3>Marks & Results</h3>
-
-          <p>View semester-wise marks and results.</p>
-
-          <span class="service-arrow"> View Results → </span>
-        </a>
-
-        <!-- ASSIGNMENTS -->
-
-        <a
-          href="{{ url_for('module_selector', module_name='assignments') }}"
-          class="service-card"
-        >
-          <div class="service-icon">📝</div>
-
-          <h3>Assignments</h3>
-
-          <p>View assignments and submission status.</p>
-
-          <span class="service-arrow"> View Assignments → </span>
-        </a>
-
-        <!-- EXAMINATIONS -->
-
-        <a
-          href="{{ url_for('module_selector', module_name='examinations') }}"
-          class="service-card"
-        >
-          <div class="service-icon">📅</div>
-
-          <h3>Examinations</h3>
-
-          <p>View Mid and End-Term examination schedules.</p>
-
-          <span class="service-arrow"> View Exams → </span>
-        </a>
-
-        <!-- TIMETABLE -->
-
-        <a
-          href="{{ url_for('module_selector', module_name='timetable') }}"
-          class="service-card"
-        >
-          <div class="service-icon">🗓️</div>
-
-          <h3>Timetable</h3>
-
-          <p>View your semester-wise class timetable.</p>
-
-          <span class="service-arrow"> View Timetable → </span>
-        </a>
-      </section>
-    </main>
-
-    <!-- ==========================================
-         FOOTER
-         ========================================== -->
-
-    <footer class="dashboard-footer">
-      © 2026 Student ERP | Student Management Portal
-    </footer>
-  </body>
+</body>
 </html>

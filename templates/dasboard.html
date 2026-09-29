@@ -1,0 +1,309 @@
+```html
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Student ERP | Dashboard</title>
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='css/dashboard.css') }}"
+    >
+
+    <style>
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .info-box {
+            background: white;
+            padding: 18px;
+            border-radius: 14px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+        }
+
+        .info-box strong {
+            display: block;
+            color: #555;
+            margin-bottom: 7px;
+        }
+
+        .info-box span {
+            font-size: 18px;
+            font-weight: 600;
+            color: #2563eb;
+        }
+
+        .module-card {
+            text-decoration: none;
+            color: inherit;
+            display: block;
+        }
+
+        .module-card:hover {
+            transform: translateY(-3px);
+            transition: 0.2s ease;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="dashboard-container">
+
+    <!-- HEADER -->
+
+    <header class="dashboard-header">
+
+        <div>
+            <h1>Student ERP</h1>
+            <p>Student Dashboard</p>
+        </div>
+
+        <a href="/logout" class="logout-btn">Logout</a>
+
+    </header>
+
+
+    <!-- MAIN CONTENT -->
+
+    <main class="dashboard-content">
+
+        <h2>
+            Welcome, {{ student.name }}! 👋
+        </h2>
+
+        <p class="welcome-text">
+            Welcome to your student portal. Manage your academic information,
+            marks, attendance, fees and notices from one place.
+        </p>
+
+
+        <!-- STUDENT INFORMATION -->
+
+        <div class="student-info">
+
+            <h3>Student Information</h3>
+
+            <div class="info-grid">
+
+                <!-- STUDENT ID -->
+
+                <div class="info-box">
+
+                    <strong>Student ID</strong>
+
+                    <span>
+                        {{ student.student_id }}
+                    </span>
+
+                </div>
+
+
+                <!-- NAME -->
+
+                <div class="info-box">
+
+                    <strong>Name</strong>
+
+                    <span>
+                        {{ student.name }}
+                    </span>
+
+                </div>
+
+
+                <!-- EMAIL -->
+
+                <div class="info-box">
+
+                    <strong>Email</strong>
+
+                    <span>
+                        {{ student.email or 'Not Available' }}
+                    </span>
+
+                </div>
+
+
+                <!-- COURSE -->
+
+                <div class="info-box">
+
+                    <strong>Course</strong>
+
+                    <span>
+                        {{ student.course or 'B.Tech' }}
+                    </span>
+
+                </div>
+
+
+                <!-- BRANCH -->
+
+                <div class="info-box">
+
+                    <strong>Branch</strong>
+
+                    <span>
+                        {{ student.branch_code or 'Not Assigned' }}
+                    </span>
+
+                </div>
+
+
+                <!-- YEAR -->
+
+                <div class="info-box">
+
+                    <strong>Year</strong>
+
+                    <span>
+                        {% if student.year_number == 1 %}
+                            1st Year
+                        {% elif student.year_number == 2 %}
+                            2nd Year
+                        {% elif student.year_number == 3 %}
+                            3rd Year
+                        {% elif student.year_number == 4 %}
+                            4th Year
+                        {% else %}
+                            Not Assigned
+                        {% endif %}
+                    </span>
+
+                </div>
+
+
+                <!-- CURRENT SEMESTER -->
+
+                <div class="info-box">
+
+                    <strong>Current Semester</strong>
+
+                    <span>
+                        {% if student.current_semester %}
+                            Semester {{ student.current_semester }}
+                        {% else %}
+                            Not Assigned
+                        {% endif %}
+                    </span>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- MODULES -->
+
+        <div class="module-grid">
+
+
+            <!-- SUBJECTS -->
+
+            <a href="/subjects" class="module-card">
+
+                <h3>📚 My Subjects</h3>
+
+                <p>
+                    View your current semester subjects.
+                </p>
+
+            </a>
+
+
+            <!-- FACULTY -->
+
+            <a href="/assigned-faculty" class="module-card">
+
+                <h3>👨‍🏫 Assigned Faculty</h3>
+
+                <p>
+                    View faculty assigned to your subjects.
+                </p>
+
+            </a>
+
+
+            <!-- ATTENDANCE -->
+
+            <a href="/attendance" class="module-card">
+
+                <h3>📊 Attendance</h3>
+
+                <p>
+                    View your subject-wise attendance.
+                </p>
+
+            </a>
+
+
+            <!-- MARKS -->
+
+            <a href="/marks" class="module-card">
+
+                <h3>📝 Marks & Results</h3>
+
+                <p>
+                    View marks, grades, SGPA and CGPA.
+                </p>
+
+            </a>
+
+
+            <!-- FEES -->
+
+            <a href="/fees" class="module-card">
+
+                <h3>💳 Fees</h3>
+
+                <p>
+                    View semester fees and pending payments.
+                </p>
+
+            </a>
+
+
+            <!-- NOTICES -->
+
+            <a href="/notices" class="module-card">
+
+                <h3>📢 Notice Board</h3>
+
+                <p>
+                    View latest academic notices.
+                </p>
+
+            </a>
+
+
+            <!-- TIMETABLE -->
+
+            <a href="/timetable" class="module-card">
+
+                <h3>🗓️ Timetable</h3>
+
+                <p>
+                    View your weekly class timetable.
+                </p>
+
+            </a>
+
+        </div>
+
+    </main>
+
+</div>
+
+</body>
+
+</html>
+```
